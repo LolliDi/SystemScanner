@@ -1,0 +1,640 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Computers">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="macAdress" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="1000" />
+          <Property Name="description" Type="nvarchar" MaxLength="1000" />
+          <Property Name="roomNumber" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="HardDrives">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdPC" Type="int" Nullable="false" />
+          <Property Name="Manufacturer" Type="nvarchar" MaxLength="200" />
+          <Property Name="Model" Type="nvarchar" MaxLength="200" />
+          <Property Name="Type" Type="nvarchar" MaxLength="50" />
+          <Property Name="SizeGB" Type="float" />
+          <Property Name="BufferMB" Type="float" />
+          <Property Name="SpeedWriteMBS" Type="float" />
+          <Property Name="SpeedReadMBS" Type="float" />
+          <Property Name="Interface" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="MotherBoards">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdPC" Type="int" Nullable="false" />
+          <Property Name="Manufacturer" Type="nvarchar" MaxLength="200" />
+          <Property Name="Model" Type="nvarchar" MaxLength="300" />
+          <Property Name="SlotsMemory" Type="int" />
+          <Property Name="MemoryType" Type="nvarchar" MaxLength="50" />
+          <Property Name="MaxPhysicalMemoryMB" Type="float" />
+          <Property Name="CanalsMemoryCount" Type="int" />
+          <Property Name="SlotsPCI" Type="int" />
+          <Property Name="SlotsPCIEx1" Type="int" />
+          <Property Name="SlotsPCIE30x16" Type="int" />
+          <Property Name="SlotsSata2" Type="int" />
+          <Property Name="SlotsSata3" Type="int" />
+          <Property Name="SlotsPS2" Type="int" />
+          <Property Name="USB20" Type="int" />
+          <Property Name="USB30" Type="int" />
+          <Property Name="VGA" Type="bit" />
+          <Property Name="DVI" Type="bit" />
+          <Property Name="HDMI" Type="bit" />
+          <Property Name="EthernetController" Type="nvarchar" MaxLength="200" />
+          <Property Name="AudioController" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="OS">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdPC" Type="int" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Version" Type="nvarchar" MaxLength="200" />
+          <Property Name="Architecture" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="PhysicalMemory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdPC" Type="int" Nullable="false" />
+          <Property Name="Manufacturer" Type="nvarchar" MaxLength="200" />
+          <Property Name="Model" Type="nvarchar" MaxLength="200" />
+          <Property Name="MemoryType" Type="nvarchar" MaxLength="50" />
+          <Property Name="SizeMB" Type="float" />
+          <Property Name="Frequency" Type="float" />
+        </EntityType>
+        <EntityType Name="Processors">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdPC" Type="int" Nullable="false" />
+          <Property Name="Manufacturer" Type="nvarchar" MaxLength="200" />
+          <Property Name="Model" Type="nvarchar" MaxLength="200" />
+          <Property Name="NumberOfCores" Type="int" />
+          <Property Name="ThreadCount" Type="int" />
+          <Property Name="StartClockSpeed" Type="float" />
+          <Property Name="L1CacheMB" Type="float" />
+          <Property Name="L2CacheMB" Type="float" />
+          <Property Name="L3CacheMB" Type="float" />
+          <Property Name="TechnicalProcess" Type="float" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="VideoControllers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdPC" Type="int" Nullable="false" />
+          <Property Name="Manufacturer" Type="nvarchar" MaxLength="200" />
+          <Property Name="Model" Type="nvarchar" MaxLength="200" />
+          <Property Name="VideoProcessor" Type="nvarchar" MaxLength="200" />
+          <Property Name="AdapterRAMMB" Type="float" />
+          <Property Name="MaxRefreshRate" Type="float" />
+          <Property Name="CurrentVerticalResolution" Type="int" />
+          <Property Name="CurrentVHorizontalResolution" Type="int" />
+          <Property Name="MemoryType" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_HardDrives_Computers">
+          <End Role="Computers" Type="Self.Computers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="HardDrives" Type="Self.HardDrives" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Computers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="HardDrives">
+              <PropertyRef Name="IdPC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MotherBoards_Computers">
+          <End Role="Computers" Type="Self.Computers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="MotherBoards" Type="Self.MotherBoards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Computers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="MotherBoards">
+              <PropertyRef Name="IdPC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OS_Computers">
+          <End Role="Computers" Type="Self.Computers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="OS" Type="Self.OS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Computers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="OS">
+              <PropertyRef Name="IdPC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PhysicalMemory_Computers">
+          <End Role="Computers" Type="Self.Computers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="PhysicalMemory" Type="Self.PhysicalMemory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Computers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PhysicalMemory">
+              <PropertyRef Name="IdPC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Processors_Computers">
+          <End Role="Computers" Type="Self.Computers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Processors" Type="Self.Processors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Computers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Processors">
+              <PropertyRef Name="IdPC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VideoControllers_Computers">
+          <End Role="Computers" Type="Self.Computers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="VideoControllers" Type="Self.VideoControllers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Computers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="VideoControllers">
+              <PropertyRef Name="IdPC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище ModelContainer">
+          <EntitySet Name="Computers" EntityType="Self.Computers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HardDrives" EntityType="Self.HardDrives" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MotherBoards" EntityType="Self.MotherBoards" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OS" EntityType="Self.OS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PhysicalMemory" EntityType="Self.PhysicalMemory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Processors" EntityType="Self.Processors" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VideoControllers" EntityType="Self.VideoControllers" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_HardDrives_Computers" Association="Self.FK_HardDrives_Computers">
+            <End Role="Computers" EntitySet="Computers" />
+            <End Role="HardDrives" EntitySet="HardDrives" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MotherBoards_Computers" Association="Self.FK_MotherBoards_Computers">
+            <End Role="Computers" EntitySet="Computers" />
+            <End Role="MotherBoards" EntitySet="MotherBoards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OS_Computers" Association="Self.FK_OS_Computers">
+            <End Role="Computers" EntitySet="Computers" />
+            <End Role="OS" EntitySet="OS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PhysicalMemory_Computers" Association="Self.FK_PhysicalMemory_Computers">
+            <End Role="Computers" EntitySet="Computers" />
+            <End Role="PhysicalMemory" EntitySet="PhysicalMemory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Processors_Computers" Association="Self.FK_Processors_Computers">
+            <End Role="Computers" EntitySet="Computers" />
+            <End Role="Processors" EntitySet="Processors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VideoControllers_Computers" Association="Self.FK_VideoControllers_Computers">
+            <End Role="Computers" EntitySet="Computers" />
+            <End Role="VideoControllers" EntitySet="VideoControllers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Computers">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="macAdress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="roomNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="HardDrives" Relationship="Self.FK_HardDrives_Computers" FromRole="Computers" ToRole="HardDrives" />
+          <NavigationProperty Name="MotherBoards" Relationship="Self.FK_MotherBoards_Computers" FromRole="Computers" ToRole="MotherBoards" />
+          <NavigationProperty Name="OS" Relationship="Self.FK_OS_Computers" FromRole="Computers" ToRole="OS" />
+          <NavigationProperty Name="PhysicalMemory" Relationship="Self.FK_PhysicalMemory_Computers" FromRole="Computers" ToRole="PhysicalMemory" />
+          <NavigationProperty Name="Processors" Relationship="Self.FK_Processors_Computers" FromRole="Computers" ToRole="Processors" />
+          <NavigationProperty Name="VideoControllers" Relationship="Self.FK_VideoControllers_Computers" FromRole="Computers" ToRole="VideoControllers" />
+        </EntityType>
+        <EntityType Name="HardDrives">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdPC" Type="Int32" Nullable="false" />
+          <Property Name="Manufacturer" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Model" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SizeGB" Type="Double" />
+          <Property Name="BufferMB" Type="Double" />
+          <Property Name="SpeedWriteMBS" Type="Double" />
+          <Property Name="SpeedReadMBS" Type="Double" />
+          <Property Name="Interface" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Computers" Relationship="Self.FK_HardDrives_Computers" FromRole="HardDrives" ToRole="Computers" />
+        </EntityType>
+        <EntityType Name="MotherBoards">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdPC" Type="Int32" Nullable="false" />
+          <Property Name="Manufacturer" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Model" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="SlotsMemory" Type="Int32" />
+          <Property Name="MemoryType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MaxPhysicalMemoryMB" Type="Double" />
+          <Property Name="CanalsMemoryCount" Type="Int32" />
+          <Property Name="SlotsPCI" Type="Int32" />
+          <Property Name="SlotsPCIEx1" Type="Int32" />
+          <Property Name="SlotsPCIE30x16" Type="Int32" />
+          <Property Name="SlotsSata2" Type="Int32" />
+          <Property Name="SlotsSata3" Type="Int32" />
+          <Property Name="SlotsPS2" Type="Int32" />
+          <Property Name="USB20" Type="Int32" />
+          <Property Name="USB30" Type="Int32" />
+          <Property Name="VGA" Type="Boolean" />
+          <Property Name="DVI" Type="Boolean" />
+          <Property Name="HDMI" Type="Boolean" />
+          <Property Name="EthernetController" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AudioController" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Computers" Relationship="Self.FK_MotherBoards_Computers" FromRole="MotherBoards" ToRole="Computers" />
+        </EntityType>
+        <EntityType Name="OS">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdPC" Type="Int32" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Version" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Architecture" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Computers" Relationship="Self.FK_OS_Computers" FromRole="OS" ToRole="Computers" />
+        </EntityType>
+        <EntityType Name="PhysicalMemory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdPC" Type="Int32" Nullable="false" />
+          <Property Name="Manufacturer" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Model" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MemoryType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SizeMB" Type="Double" />
+          <Property Name="Frequency" Type="Double" />
+          <NavigationProperty Name="Computers" Relationship="Self.FK_PhysicalMemory_Computers" FromRole="PhysicalMemory" ToRole="Computers" />
+        </EntityType>
+        <EntityType Name="Processors">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdPC" Type="Int32" Nullable="false" />
+          <Property Name="Manufacturer" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Model" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NumberOfCores" Type="Int32" />
+          <Property Name="ThreadCount" Type="Int32" />
+          <Property Name="StartClockSpeed" Type="Double" />
+          <Property Name="L1CacheMB" Type="Double" />
+          <Property Name="L2CacheMB" Type="Double" />
+          <Property Name="L3CacheMB" Type="Double" />
+          <Property Name="TechnicalProcess" Type="Double" />
+          <NavigationProperty Name="Computers" Relationship="Self.FK_Processors_Computers" FromRole="Processors" ToRole="Computers" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="VideoControllers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdPC" Type="Int32" Nullable="false" />
+          <Property Name="Manufacturer" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Model" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="VideoProcessor" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AdapterRAMMB" Type="Double" />
+          <Property Name="MaxRefreshRate" Type="Double" />
+          <Property Name="CurrentVerticalResolution" Type="Int32" />
+          <Property Name="CurrentVHorizontalResolution" Type="Int32" />
+          <Property Name="MemoryType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Computers" Relationship="Self.FK_VideoControllers_Computers" FromRole="VideoControllers" ToRole="Computers" />
+        </EntityType>
+        <Association Name="FK_HardDrives_Computers">
+          <End Role="Computers" Type="Self.Computers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="HardDrives" Type="Self.HardDrives" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Computers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="HardDrives">
+              <PropertyRef Name="IdPC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MotherBoards_Computers">
+          <End Role="Computers" Type="Self.Computers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="MotherBoards" Type="Self.MotherBoards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Computers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="MotherBoards">
+              <PropertyRef Name="IdPC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OS_Computers">
+          <End Role="Computers" Type="Self.Computers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="OS" Type="Self.OS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Computers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="OS">
+              <PropertyRef Name="IdPC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PhysicalMemory_Computers">
+          <End Role="Computers" Type="Self.Computers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="PhysicalMemory" Type="Self.PhysicalMemory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Computers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PhysicalMemory">
+              <PropertyRef Name="IdPC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Processors_Computers">
+          <End Role="Computers" Type="Self.Computers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Processors" Type="Self.Processors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Computers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Processors">
+              <PropertyRef Name="IdPC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VideoControllers_Computers">
+          <End Role="Computers" Type="Self.Computers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="VideoControllers" Type="Self.VideoControllers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Computers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="VideoControllers">
+              <PropertyRef Name="IdPC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Computers" EntityType="Self.Computers" />
+          <EntitySet Name="HardDrives" EntityType="Self.HardDrives" />
+          <EntitySet Name="MotherBoards" EntityType="Self.MotherBoards" />
+          <EntitySet Name="OS" EntityType="Self.OS" />
+          <EntitySet Name="PhysicalMemory" EntityType="Self.PhysicalMemory" />
+          <EntitySet Name="Processors" EntityType="Self.Processors" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="VideoControllers" EntityType="Self.VideoControllers" />
+          <AssociationSet Name="FK_HardDrives_Computers" Association="Self.FK_HardDrives_Computers">
+            <End Role="Computers" EntitySet="Computers" />
+            <End Role="HardDrives" EntitySet="HardDrives" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MotherBoards_Computers" Association="Self.FK_MotherBoards_Computers">
+            <End Role="Computers" EntitySet="Computers" />
+            <End Role="MotherBoards" EntitySet="MotherBoards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OS_Computers" Association="Self.FK_OS_Computers">
+            <End Role="Computers" EntitySet="Computers" />
+            <End Role="OS" EntitySet="OS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PhysicalMemory_Computers" Association="Self.FK_PhysicalMemory_Computers">
+            <End Role="Computers" EntitySet="Computers" />
+            <End Role="PhysicalMemory" EntitySet="PhysicalMemory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Processors_Computers" Association="Self.FK_Processors_Computers">
+            <End Role="Computers" EntitySet="Computers" />
+            <End Role="Processors" EntitySet="Processors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VideoControllers_Computers" Association="Self.FK_VideoControllers_Computers">
+            <End Role="Computers" EntitySet="Computers" />
+            <End Role="VideoControllers" EntitySet="VideoControllers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище ModelContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="Computers">
+            <EntityTypeMapping TypeName="Model.Computers">
+              <MappingFragment StoreEntitySet="Computers">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="macAdress" ColumnName="macAdress" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="roomNumber" ColumnName="roomNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HardDrives">
+            <EntityTypeMapping TypeName="Model.HardDrives">
+              <MappingFragment StoreEntitySet="HardDrives">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdPC" ColumnName="IdPC" />
+                <ScalarProperty Name="Manufacturer" ColumnName="Manufacturer" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="SizeGB" ColumnName="SizeGB" />
+                <ScalarProperty Name="BufferMB" ColumnName="BufferMB" />
+                <ScalarProperty Name="SpeedWriteMBS" ColumnName="SpeedWriteMBS" />
+                <ScalarProperty Name="SpeedReadMBS" ColumnName="SpeedReadMBS" />
+                <ScalarProperty Name="Interface" ColumnName="Interface" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MotherBoards">
+            <EntityTypeMapping TypeName="Model.MotherBoards">
+              <MappingFragment StoreEntitySet="MotherBoards">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdPC" ColumnName="IdPC" />
+                <ScalarProperty Name="Manufacturer" ColumnName="Manufacturer" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="SlotsMemory" ColumnName="SlotsMemory" />
+                <ScalarProperty Name="MemoryType" ColumnName="MemoryType" />
+                <ScalarProperty Name="MaxPhysicalMemoryMB" ColumnName="MaxPhysicalMemoryMB" />
+                <ScalarProperty Name="CanalsMemoryCount" ColumnName="CanalsMemoryCount" />
+                <ScalarProperty Name="SlotsPCI" ColumnName="SlotsPCI" />
+                <ScalarProperty Name="SlotsPCIEx1" ColumnName="SlotsPCIEx1" />
+                <ScalarProperty Name="SlotsPCIE30x16" ColumnName="SlotsPCIE30x16" />
+                <ScalarProperty Name="SlotsSata2" ColumnName="SlotsSata2" />
+                <ScalarProperty Name="SlotsSata3" ColumnName="SlotsSata3" />
+                <ScalarProperty Name="SlotsPS2" ColumnName="SlotsPS2" />
+                <ScalarProperty Name="USB20" ColumnName="USB20" />
+                <ScalarProperty Name="USB30" ColumnName="USB30" />
+                <ScalarProperty Name="VGA" ColumnName="VGA" />
+                <ScalarProperty Name="DVI" ColumnName="DVI" />
+                <ScalarProperty Name="HDMI" ColumnName="HDMI" />
+                <ScalarProperty Name="EthernetController" ColumnName="EthernetController" />
+                <ScalarProperty Name="AudioController" ColumnName="AudioController" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OS">
+            <EntityTypeMapping TypeName="Model.OS">
+              <MappingFragment StoreEntitySet="OS">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdPC" ColumnName="IdPC" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Version" ColumnName="Version" />
+                <ScalarProperty Name="Architecture" ColumnName="Architecture" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PhysicalMemory">
+            <EntityTypeMapping TypeName="Model.PhysicalMemory">
+              <MappingFragment StoreEntitySet="PhysicalMemory">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdPC" ColumnName="IdPC" />
+                <ScalarProperty Name="Manufacturer" ColumnName="Manufacturer" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="MemoryType" ColumnName="MemoryType" />
+                <ScalarProperty Name="SizeMB" ColumnName="SizeMB" />
+                <ScalarProperty Name="Frequency" ColumnName="Frequency" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Processors">
+            <EntityTypeMapping TypeName="Model.Processors">
+              <MappingFragment StoreEntitySet="Processors">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdPC" ColumnName="IdPC" />
+                <ScalarProperty Name="Manufacturer" ColumnName="Manufacturer" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="NumberOfCores" ColumnName="NumberOfCores" />
+                <ScalarProperty Name="ThreadCount" ColumnName="ThreadCount" />
+                <ScalarProperty Name="StartClockSpeed" ColumnName="StartClockSpeed" />
+                <ScalarProperty Name="L1CacheMB" ColumnName="L1CacheMB" />
+                <ScalarProperty Name="L2CacheMB" ColumnName="L2CacheMB" />
+                <ScalarProperty Name="L3CacheMB" ColumnName="L3CacheMB" />
+                <ScalarProperty Name="TechnicalProcess" ColumnName="TechnicalProcess" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="Model.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VideoControllers">
+            <EntityTypeMapping TypeName="Model.VideoControllers">
+              <MappingFragment StoreEntitySet="VideoControllers">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdPC" ColumnName="IdPC" />
+                <ScalarProperty Name="Manufacturer" ColumnName="Manufacturer" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="VideoProcessor" ColumnName="VideoProcessor" />
+                <ScalarProperty Name="AdapterRAMMB" ColumnName="AdapterRAMMB" />
+                <ScalarProperty Name="MaxRefreshRate" ColumnName="MaxRefreshRate" />
+                <ScalarProperty Name="CurrentVerticalResolution" ColumnName="CurrentVerticalResolution" />
+                <ScalarProperty Name="CurrentVHorizontalResolution" ColumnName="CurrentVHorizontalResolution" />
+                <ScalarProperty Name="MemoryType" ColumnName="MemoryType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

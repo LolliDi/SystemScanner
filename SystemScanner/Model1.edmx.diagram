@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="a0e7cfd3c22e4d0c869711f27dbf96c7" Name="Diagram1">
+        <EntityTypeShape EntityType="Model.Computers" Width="1.5" PointX="0.75" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.HardDrives" Width="1.5" PointX="3" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.MotherBoards" Width="1.5" PointX="3" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.OS" Width="1.5" PointX="3" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.PhysicalMemory" Width="1.5" PointX="3" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Processors" Width="1.5" PointX="3" PointY="18.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.sysdiagrams" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.VideoControllers" Width="1.5" PointX="3" PointY="22.125" IsExpanded="true" />
+        <AssociationConnector Association="Model.FK_HardDrives_Computers" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_MotherBoards_Computers" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_OS_Computers" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_PhysicalMemory_Computers" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_Processors_Computers" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_VideoControllers_Computers" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
