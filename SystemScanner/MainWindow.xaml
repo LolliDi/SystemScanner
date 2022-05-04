@@ -7,6 +7,124 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+
+        <StackPanel Orientation="Vertical" >
         
+            <StackPanel>
+                <Border BorderThickness="1" BorderBrush="Gray" >
+                    <StackPanel Orientation="Horizontal" MouseLeftButtonDown="stck_MouseLeftButtonDown">
+                        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center">Процессоры</TextBlock>
+                        <TextBlock HorizontalAlignment="Right" VerticalAlignment="Bottom">\/</TextBlock>
+                        
+                    </StackPanel>
+                </Border>
+
+
+
+                <ListView Name="ListViewProcessors">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Model}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+            
+            <StackPanel>
+                <Border BorderThickness="1" BorderBrush="Gray" >
+                    <StackPanel Orientation="Horizontal" MouseLeftButtonDown="MemoryStck_MouseLeftButtonDown">
+                        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center">Оперативная память</TextBlock>
+                        <TextBlock HorizontalAlignment="Right" VerticalAlignment="Bottom">\/</TextBlock>
+
+                    </StackPanel>
+                </Border>
+
+
+                
+                    <ListView Name="ListViewMemory" >
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding MemoryType, StringFormat={}Тип: {0}}"/>
+                                    <TextBlock Text="{Binding Size, StringFormat={}Размер: {0}}"/>
+                                    <TextBlock Text="{Binding Frequency, StringFormat={}Частота: {0}}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                
+            </StackPanel>
+            <StackPanel>
+                <Border BorderThickness="1" BorderBrush="Gray" >
+                    <StackPanel Orientation="Horizontal" MouseLeftButtonDown="Video_MouseLeftButtonDown">
+                        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center">Видеокарты</TextBlock>
+                        <TextBlock HorizontalAlignment="Right" VerticalAlignment="Bottom">\/</TextBlock>
+
+                    </StackPanel>
+                </Border>
+
+
+
+                <ListView Name="ListViewVideo" >
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Model, StringFormat={}Название: {0}}"/>
+                                <TextBlock Text="{Binding VideoProcessor, StringFormat={}ВидеоПроцессор: {0}}"/>
+                                <TextBlock Text="{Binding AdapterRAMMB, StringFormat={}Память: {0}}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+            </StackPanel>
+            <StackPanel>
+                <Border BorderThickness="1" BorderBrush="Gray" >
+                    <StackPanel Orientation="Horizontal" MouseLeftButtonDown="Mather_MouseLeftButtonDown">
+                        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center">Матка</TextBlock>
+                        <TextBlock HorizontalAlignment="Right" VerticalAlignment="Bottom">\/</TextBlock>
+
+                    </StackPanel>
+                </Border>
+
+
+
+                <ListView Name="ListViewMather" >
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Manufacturer, StringFormat={}Производитель: {0}}"/>
+                                <TextBlock Text="{Binding Model, StringFormat={}Модель: {0}}"/>
+                                <TextBlock Text="{Binding MaxPhysicalMemoryMB, StringFormat={}Максимальное количестов оперативной памяти: {0}}"/>
+                                <TextBlock Text="{Binding SlotsMemory, StringFormat={}Слоты под память: {0}}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Window>
