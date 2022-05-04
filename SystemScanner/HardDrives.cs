@@ -14,8 +14,13 @@ namespace SystemScanner
     
     public partial class HardDrives
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public HardDrives()
+        {
+            this.ComputerHard = new HashSet<ComputerHard>();
+        }
+    
         public int Id { get; set; }
-        public int IdPC { get; set; }
         public string Manufacturer { get; set; }
         public string Model { get; set; }
         public string Type { get; set; }
@@ -25,6 +30,7 @@ namespace SystemScanner
         public Nullable<double> SpeedReadMBS { get; set; }
         public string Interface { get; set; }
     
-        public virtual Computers Computers { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ComputerHard> ComputerHard { get; set; }
     }
 }

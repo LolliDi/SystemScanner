@@ -10,17 +10,10 @@
 namespace SystemScanner
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class OS
+    public partial class sp_helpdiagramdefinition_Result
     {
-        public int Id { get; set; }
-        public int IdPC { get; set; }
-        public string Title { get; set; }
-        public string Version { get; set; }
-        public string Architecture { get; set; }
-        public string NumberProduct { get; set; }
-    
-        public virtual Computers Computers { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }

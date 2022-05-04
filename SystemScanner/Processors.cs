@@ -14,8 +14,13 @@ namespace SystemScanner
     
     public partial class Processors
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Processors()
+        {
+            this.Computers = new HashSet<Computers>();
+        }
+    
         public int Id { get; set; }
-        public int IdPC { get; set; }
         public string Manufacturer { get; set; }
         public string Model { get; set; }
         public Nullable<int> NumberOfCores { get; set; }
@@ -26,6 +31,7 @@ namespace SystemScanner
         public Nullable<double> L3CacheMB { get; set; }
         public Nullable<double> TechnicalProcess { get; set; }
     
-        public virtual Computers Computers { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Computers> Computers { get; set; }
     }
 }

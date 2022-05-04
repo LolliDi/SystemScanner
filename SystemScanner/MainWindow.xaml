@@ -30,7 +30,7 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <TextBlock Text="{Binding Model}"/>
+                                <TextBox Text="{Binding Model}" IsReadOnly="True"/>
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
@@ -115,10 +115,10 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <TextBlock Text="{Binding Manufacturer, StringFormat={}Производитель: {0}}"/>
-                                <TextBlock Text="{Binding Model, StringFormat={}Модель: {0}}"/>
-                                <TextBlock Text="{Binding MaxPhysicalMemoryMB, StringFormat={}Максимальное количестов оперативной памяти: {0}}"/>
-                                <TextBlock Text="{Binding SlotsMemory, StringFormat={}Слоты под память: {0}}"/>
+                                <TextBox IsReadOnly="True" Text="{Binding Manufacturer, StringFormat={}Производитель: {0}}"/>
+                                <TextBox IsReadOnly="True" Text="{Binding Model, StringFormat={}Модель: {0}}"/>
+                                <TextBox IsReadOnly="True" Text="{Binding MaxPhysicalMemoryMB, StringFormat={}Максимальное количестов оперативной памяти: {0}}"/>
+                                <TextBox IsReadOnly="True" Text="{Binding SlotsMemory, StringFormat={}Слоты под память: {0}}"/>
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>

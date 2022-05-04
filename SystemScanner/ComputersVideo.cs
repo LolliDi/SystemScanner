@@ -12,15 +12,13 @@ namespace SystemScanner
     using System;
     using System.Collections.Generic;
     
-    public partial class OS
+    public partial class ComputersVideo
     {
         public int Id { get; set; }
         public int IdPC { get; set; }
-        public string Title { get; set; }
-        public string Version { get; set; }
-        public string Architecture { get; set; }
-        public string NumberProduct { get; set; }
+        public int IdVideo { get; set; }
     
         public virtual Computers Computers { get; set; }
+        public virtual VideoControllers VideoControllers { get; set; }
     }
 }

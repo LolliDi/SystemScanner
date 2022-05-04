@@ -14,12 +14,13 @@ namespace SystemScanner
     /// </summary>
     public partial class MainWindow : Window
     {
-        List<Processors> processors = new List<Processors>();
+        Computers computer;
+        Processors processor;
         List<VideoControllers> videoControllers = new List<VideoControllers>();
         List<PhysicalMemory> physicalMemories = new List<PhysicalMemory>();
         List<HardDrives> hardDrives = new List<HardDrives>();
-        List<MotherBoards> motherBoards = new List<MotherBoards>();
-        List<OS> oS = new List<OS>();
+        MotherBoards motherBoard = new MotherBoards();
+        OS oS;
         int idPC;
         public MainWindow()
         {
@@ -34,31 +35,85 @@ namespace SystemScanner
                 where nic.OperationalStatus == OperationalStatus.Up
                 select nic.GetPhysicalAddress().ToString()
             ).FirstOrDefault();
-            Computers pc = DBCl.db.Computers.FirstOrDefault(c => c.macAdress == macAddr);
-            if (pc != null)
+            computer = DBCl.db.Computers.FirstOrDefault(c => c.MacAdress == macAddr);
+            if (computer != null)
             {
-                idPC = pc.id;
+                idPC = computer.id;
             }
             else
             {
-                DBCl.db.Computers.Add(new Computers()
+                computer = new Computers()
                 {
-                    macAdress = macAddr,
-                });
+                    MacAdress = macAddr,
+                };
+                DBCl.db.Computers.Add(computer);
                 DBCl.db.SaveChanges();
-                idPC = DBCl.db.Computers.FirstOrDefault(c => c.macAdress == macAddr).id;
+                idPC = computer.id;
             }
+            GetInfo();
+            computer.DateCheck = DateTime.Now;
+            DBCl.db.SaveChanges();
+            ListViewMemory.ItemsSource=physicalMemories;
+            ListViewProcessors.Items.Add(processor);
+            ListViewVideo.ItemsSource = videoControllers;
+            ListViewMather.Items.Add( motherBoard);
+            //GetHardWareInfo("Win32_PhysicalMemory");
+        }
+
+        public void GetInfo()
+        {
             GetHardWareInfo("Win32_Processor");
             GetHardWareInfo("Win32_VideoController");
+
+            foreach (VideoControllers v in videoControllers)
+            {
+                ComputersVideo cv = DBCl.db.ComputersVideo.FirstOrDefault(x => x.IdPC == idPC && x.IdVideo == v.Id);
+                if (cv != null)
+                {
+                    DBCl.db.ComputersVideo.Remove(cv);
+                }
+            }
+            DBCl.db.SaveChanges();
+            foreach (VideoControllers v in videoControllers)
+            {
+                DBCl.db.ComputersVideo.Add(new ComputersVideo()
+                {
+                    IdPC = idPC,
+                    IdVideo = v.Id,
+                });
+               
+            }
+            DBCl.db.SaveChanges();
+            List<PhysicalMemory> pm = DBCl.db.PhysicalMemory.Where(x=>x.IdPC==idPC).ToList();
+            foreach (PhysicalMemory mem in pm)
+            {
+                DBCl.db.PhysicalMemory.Remove(mem);
+            }
+            DBCl.db.SaveChanges();
             GetHardWareInfo("Win32_PhysicalMemory");
+            foreach(PhysicalMemory mem in physicalMemories)
+            {
+                DBCl.db.PhysicalMemory.Add(mem);
+            }
+            DBCl.db.SaveChanges();
+
             GetHardWareInfo("Win32_DiskDrive");
+            foreach (HardDrives v in hardDrives)
+            {
+                ComputerHard cv = DBCl.db.ComputerHard.FirstOrDefault(x => x.IdPC == idPC && x.IdHard == v.Id);
+                if (cv != null)
+                {
+                    DBCl.db.ComputerHard.Remove(cv);
+                }
+            }
+            DBCl.db.SaveChanges();
+            foreach (HardDrives v in hardDrives)
+            {
+                DBCl.db.ComputerHard.Add(new ComputerHard() { IdPC = idPC, IdHard = v.Id});
+            }
+            DBCl.db.SaveChanges();
             GetHardWareInfo("Win32_OperatingSystem");
             GetHardWareInfo("Win32_BaseBoard");
-            ListViewMemory.ItemsSource = physicalMemories;
-            ListViewProcessors.ItemsSource = processors;
-            ListViewVideo.ItemsSource = videoControllers;
-            ListViewMather.ItemsSource = motherBoards;
-            //GetHardWareInfo("Win32_PhysicalMemory");
         }
 
         public List<string> GetHardwareInfo(string WIN32_Class, string ClassItemField)
@@ -104,69 +159,124 @@ namespace SystemScanner
                     switch (key)
                     {
                         case "Win32_Processor":
-                            processors.Add(new Processors()
+                            string model = obj["Name"].ToString().Trim();
+                            int numberOfCores = Convert.ToInt32(obj["NumberOfCores"].ToString().Trim());
+                            double startClockSpeed = Convert.ToDouble(obj["CurrentClockSpeed"].ToString().Trim());
+                            int threadCount = Convert.ToInt32(obj["ThreadCount"].ToString().Trim());
+                            double l1CacheMB = Convert.ToDouble(GetHardwareInfo("Win32_CacheMemory", "MaxCacheSize")[0].ToString().Trim()) / 1024;
+                            double l2CacheMB = Convert.ToDouble(obj["L2CacheSize"].ToString().Trim()) / 1024;
+                            double l3CacheMB = Convert.ToDouble(obj["L3CacheSize"].ToString().Trim()) / 1024;
+                            processor = DBCl.db.Processors.FirstOrDefault(x=>x.Model == model);
+                            if(processor == null)
                             {
-                                IdPC = idPC,
-                                Model = obj["Name"].ToString().Trim(),
-                                NumberOfCores = Convert.ToInt32(obj["NumberOfCores"].ToString().Trim()),
-                                StartClockSpeed = Convert.ToDouble(obj["CurrentClockSpeed"].ToString().Trim()),
-                                ThreadCount = Convert.ToInt32(obj["ThreadCount"].ToString().Trim()),
-                                L2CacheMB = Convert.ToDouble(obj["L2CacheSize"].ToString().Trim()) / 1024,
-                                L3CacheMB = Convert.ToDouble(obj["L3CacheSize"].ToString().Trim()) / 1024,
-
-                            });
-                            break;
+                                processor = new Processors()
+                                {
+                                    Model = model,
+                                    NumberOfCores = numberOfCores,
+                                    StartClockSpeed = startClockSpeed,
+                                    ThreadCount = threadCount,
+                                    L1CacheMB = l1CacheMB,
+                                    L2CacheMB = l2CacheMB,
+                                    L3CacheMB = l3CacheMB,
+                                };
+                                DBCl.db.Processors.Add(processor);
+                                
+                            }
+                            computer.ProcessorId = processor.Id;
+                            DBCl.db.SaveChanges();
+                            return;
                         case "Win32_VideoController":
-                            videoControllers.Add(new VideoControllers()
+                            string manufacturer = obj["AdapterCompatibility"].ToString().Trim();
+                             string   modelVideo = obj["Caption"].ToString().Trim();
+                            string videoProcessor = obj["VideoProcessor"].ToString().Trim();
+                            double adapterRAMMB = Convert.ToDouble(obj["AdapterRAM"].ToString().Trim()) / 1024 / 1024;
+                            double maxRefreshRate = Convert.ToDouble(obj["MaxRefreshRate"].ToString().Trim());
+                            int currentVerticalResolution = Convert.ToInt32(obj["CurrentVerticalResolution"].ToString().Trim());
+                            int currentVHorizontalResolution = Convert.ToInt32(obj["CurrentHorizontalResolution"].ToString().Trim());
+                            VideoControllers v = DBCl.db.VideoControllers.FirstOrDefault(x =>x.Manufacturer==manufacturer&&x.Model==modelVideo);
+                            if (v == null)
                             {
-                                IdPC = idPC,
-                                Manufacturer = obj["AdapterCompatibility"].ToString().Trim(),
-                                Model = obj["Caption"].ToString().Trim(),
-                                VideoProcessor = obj["VideoProcessor"].ToString().Trim(),
-                                AdapterRAMMB = Convert.ToDouble(obj["AdapterRAM"].ToString().Trim()) / 1024 / 1024,
-                                MaxRefreshRate = Convert.ToDouble(obj["MaxRefreshRate"].ToString().Trim()),
-                                CurrentVerticalResolution = Convert.ToInt32(obj["CurrentVerticalResolution"].ToString().Trim()),
-                                CurrentVHorizontalResolution = Convert.ToInt32(obj["CurrentHorizontalResolution"].ToString().Trim()),
-                            });
+                                v = new VideoControllers(){
+                                    Manufacturer = manufacturer,
+                                    Model = modelVideo,
+                                    VideoProcessor = videoProcessor,
+                                    AdapterRAMMB = adapterRAMMB,
+                                    MaxRefreshRate = maxRefreshRate,
+                                    CurrentVerticalResolution = currentVerticalResolution,
+                                    CurrentVHorizontalResolution = currentVHorizontalResolution,
+                                };
+                                DBCl.db.VideoControllers.Add(v);
+                                DBCl.db.SaveChanges();
+                                 
+                            }
+                            videoControllers.Add(v);
+                            
+                            
                             break;
                         case "Win32_PhysicalMemory":
+
                             physicalMemories.Add(new PhysicalMemory()
                             {
                                 IdPC = idPC,
                                 SizeMB = Convert.ToDouble(obj["Capacity"].ToString().Trim()) / 1024 / 1024,
                                 Frequency = Convert.ToDouble(obj["Speed"].ToString().Trim()),
                                 MemoryType = GetMemoryType(Convert.ToInt32(obj["MemoryType"].ToString().Trim())),
-
                             });
                             break;
                         case "Win32_DiskDrive":
-                            hardDrives.Add(new HardDrives()
+                            string modelDisk = obj["Caption"].ToString().Trim();
+                            long sizeGB = Convert.ToInt64(obj["Size"].ToString().Trim()) / 1000000000;
+                            HardDrives hd = DBCl.db.HardDrives.FirstOrDefault(x => x.Model == modelDisk);
+                            if(hd == null)
                             {
-                                IdPC = idPC,
-                                Model = obj["Caption"].ToString().Trim(),
-                                SizeGB = Convert.ToInt64(obj["Size"].ToString().Trim()) / 1000000,
-                            }); ;
+                                hd = new HardDrives()
+                                {
+                                    Model = modelDisk,
+                                    SizeGB = sizeGB,
+                                };
+                                DBCl.db.HardDrives.Add(hd);
+                                DBCl.db.SaveChanges();
+                            }
+                            hardDrives.Add(hd);
                             break;
                         case "Win32_BaseBoard":
-                            motherBoards.Add(new MotherBoards()
+                            string manufacturerMother = obj["Manufacturer"].ToString().Trim();
+                            string modelMother = obj["Product"].ToString().Trim();
+                            int maxPhysicalMemoryMB = Convert.ToInt32(GetHardwareInfo("Win32_PhysicalMemoryArray", "maxCapacity")[0]) / 1024;
+                            int slotsMemory = Convert.ToInt32(GetHardwareInfo("Win32_PhysicalMemoryArray", "MemoryDevices")[0]);
+                            motherBoard = DBCl.db.MotherBoards.FirstOrDefault(x => x.Model == modelMother&&x.Manufacturer==manufacturerMother);
+                            if (motherBoard == null)
                             {
-                                Manufacturer = obj["Manufacturer"].ToString().Trim(),
-                                Model = obj["Product"].ToString().Trim(),
-                                IdPC = idPC,
-                                MaxPhysicalMemoryMB = Convert.ToInt32(GetHardwareInfo("Win32_PhysicalMemoryArray", "maxCapacity")[0]) / 1024,
-                                SlotsMemory = Convert.ToInt32(GetHardwareInfo("Win32_PhysicalMemoryArray", "MemoryDevices")[0]),
-
-                            });
+                                motherBoard = new MotherBoards()
+                                {
+                                    Manufacturer = manufacturerMother,
+                                    Model = modelMother,
+                                    MaxPhysicalMemoryMB = maxPhysicalMemoryMB,
+                                    SlotsMemory = slotsMemory,
+                                    MemoryType = physicalMemories[0].MemoryType,
+                                };
+                                DBCl.db.MotherBoards.Add(motherBoard);
+                                
+                            }
+                            computer.MotherBoardId = motherBoard.Id;
+                            DBCl.db.SaveChanges();
                             break;
                         case "Win32_OperatingSystem":
-                            oS.Add(new OS()
+                            oS = DBCl.db.OS.FirstOrDefault(x => x.IdPC == idPC);
+                            if (oS == null)
                             {
-                                IdPC = idPC,
-                                Architecture = obj["OSArchitecture"].ToString().Trim(),
-                                Version = obj["Version"].ToString().Trim(),
-                                Title = obj["Caption"].ToString().Trim(),
-                            });
-                            break;
+                                oS = new OS()
+                                {
+                                    IdPC = idPC,
+                                    Architecture = obj["OSArchitecture"].ToString().Trim(),
+                                    Version = obj["Version"].ToString().Trim(),
+                                    Title = obj["Caption"].ToString().Trim(),
+                                    NumberProduct = obj["SerialNumber"].ToString().Trim(),
+                                };
+                                DBCl.db.OS.Add(oS);
+                                DBCl.db.SaveChanges();
+                            }
+                            return;
                         default:
                             break;
                     }
@@ -233,24 +343,6 @@ namespace SystemScanner
 
         private bool isToggleProcessor;
         private bool isToggleMemory;
-        //private void btn_Click(object sender, RoutedEventArgs e)
-        //{
-        //    DoubleAnimation da = new DoubleAnimation();
-        //    if (!isToggleProcessor)
-        //    {
-        //        da.To = 90;
-        //        da.Duration = TimeSpan.FromSeconds(1);
-        //        brd.BeginAnimation(Border.HeightProperty, da);
-        //        isToggleProcessor = true;
-        //    }
-        //    else
-        //    {
-        //        da.To = 0;
-        //        da.Duration = TimeSpan.FromSeconds(1);
-        //        brd.BeginAnimation(Border.HeightProperty, da);
-        //        isToggleProcessor = false;
-        //    }
-        //}
 
         private void ShowPanel(ListView sp, ref bool toggle)
         {
@@ -259,7 +351,7 @@ namespace SystemScanner
             {
                 
                 da.To = 90;
-                da.Duration = TimeSpan.FromSeconds(1);
+                da.Duration = TimeSpan.FromSeconds(0.15);
                 sp.BeginAnimation(Border.HeightProperty, da);
                 toggle = true;
 
@@ -268,7 +360,7 @@ namespace SystemScanner
             {
 
                 da.To = 0;
-                da.Duration = TimeSpan.FromSeconds(1);
+                da.Duration = TimeSpan.FromSeconds(0.15);
                 sp.BeginAnimation(Border.HeightProperty, da);
                 toggle = false;
                 

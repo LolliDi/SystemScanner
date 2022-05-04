@@ -14,8 +14,13 @@ namespace SystemScanner
     
     public partial class VideoControllers
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public VideoControllers()
+        {
+            this.ComputersVideo = new HashSet<ComputersVideo>();
+        }
+    
         public int Id { get; set; }
-        public int IdPC { get; set; }
         public string Manufacturer { get; set; }
         public string Model { get; set; }
         public string VideoProcessor { get; set; }
@@ -25,6 +30,7 @@ namespace SystemScanner
         public Nullable<int> CurrentVHorizontalResolution { get; set; }
         public string MemoryType { get; set; }
     
-        public virtual Computers Computers { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ComputersVideo> ComputersVideo { get; set; }
     }
 }

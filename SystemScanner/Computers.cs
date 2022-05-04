@@ -17,31 +17,30 @@ namespace SystemScanner
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Computers()
         {
-            this.HardDrives = new HashSet<HardDrives>();
-            this.MotherBoards = new HashSet<MotherBoards>();
+            this.ComputerHard = new HashSet<ComputerHard>();
+            this.ComputersVideo = new HashSet<ComputersVideo>();
             this.OS = new HashSet<OS>();
             this.PhysicalMemory = new HashSet<PhysicalMemory>();
-            this.Processors = new HashSet<Processors>();
-            this.VideoControllers = new HashSet<VideoControllers>();
         }
     
         public int id { get; set; }
-        public string macAdress { get; set; }
-        public string name { get; set; }
-        public string description { get; set; }
-        public string roomNumber { get; set; }
+        public string MacAdress { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string RoomNumber { get; set; }
+        public Nullable<int> MotherBoardId { get; set; }
+        public Nullable<int> ProcessorId { get; set; }
+        public Nullable<System.DateTime> DateCheck { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<HardDrives> HardDrives { get; set; }
+        public virtual ICollection<ComputerHard> ComputerHard { get; set; }
+        public virtual MotherBoards MotherBoards { get; set; }
+        public virtual Processors Processors { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MotherBoards> MotherBoards { get; set; }
+        public virtual ICollection<ComputersVideo> ComputersVideo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OS> OS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PhysicalMemory> PhysicalMemory { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Processors> Processors { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<VideoControllers> VideoControllers { get; set; }
     }
 }
