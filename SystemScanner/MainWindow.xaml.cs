@@ -21,14 +21,13 @@ namespace SystemScanner
         List<HardDrives> hardDrives = new List<HardDrives>();
         MotherBoards motherBoard = new MotherBoards();
         OS oS;
+
         int idPC;
         public MainWindow()
         {
             InitializeComponent();
-            ListViewProcessors.Height = 0;
             ListViewMemory.Height = 0;
             ListViewVideo.Height = 0;
-            ListViewMather.Height = 0;
             string macAddr =
             (
                 from nic in NetworkInterface.GetAllNetworkInterfaces()
@@ -53,10 +52,11 @@ namespace SystemScanner
             GetInfo();
             computer.DateCheck = DateTime.Now;
             DBCl.db.SaveChanges();
+            StackPanelMather.DataContext = motherBoard;
+            StackPanelProcessor.DataContext = processor;
             ListViewMemory.ItemsSource=physicalMemories;
-            ListViewProcessors.Items.Add(processor);
+            
             ListViewVideo.ItemsSource = videoControllers;
-            ListViewMather.Items.Add( motherBoard);
             //GetHardWareInfo("Win32_PhysicalMemory");
         }
 
@@ -334,60 +334,162 @@ namespace SystemScanner
             }
             return outValue;
         }
-        struct SysInf
-        {
-            public string Name { get; set; }
-            public string Description { get; set; }
-
-        }
-
         private bool isToggleProcessor;
         private bool isToggleMemory;
-
-        private void ShowPanel(ListView sp, ref bool toggle)
+        bool isToggleBoard;
+        private void ShowPanel(ListView sp, ref bool toggle, int height)
         {
             DoubleAnimation da = new DoubleAnimation();
             if (!toggle)
             {
-                
-                da.To = 90;
-                da.Duration = TimeSpan.FromSeconds(0.15);
+                da.To = height;
+                da.Duration = TimeSpan.FromSeconds(0.25);
                 sp.BeginAnimation(Border.HeightProperty, da);
                 toggle = true;
-
+            }
+            else
+            {
+                da.To = 0;
+                da.Duration = TimeSpan.FromSeconds(0.25);
+                sp.BeginAnimation(Border.HeightProperty, da);
+                toggle = false;
+            }
+        }
+        private void ShowPanel(GroupBox sp, ref bool toggle, int height)
+        {
+            DoubleAnimation da = new DoubleAnimation();
+            if (!toggle)
+            {
+                da.To = height;
+                da.Duration = TimeSpan.FromSeconds(0.25);
+                sp.BeginAnimation(Border.HeightProperty, da);
+                toggle = true;
             }
             else
             {
 
                 da.To = 0;
-                da.Duration = TimeSpan.FromSeconds(0.15);
+                da.Duration = TimeSpan.FromSeconds(0.25);
                 sp.BeginAnimation(Border.HeightProperty, da);
                 toggle = false;
-                
-
             }
         }
-
-        private void stck_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            ShowPanel(ListViewProcessors, ref isToggleProcessor);
-        }
-
+        //private void stck_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        //{
+        //    ShowPanel(ListViewProcessors, ref isToggleProcessor);
+        //}
         private void MemoryStck_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            ShowPanel(ListViewMemory, ref isToggleMemory);
+            ShowPanel(ListViewMemory, ref isToggleMemory, 100);
             
         }
-
         bool isToggleVideo;
         private void Video_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            ShowPanel(ListViewVideo, ref isToggleVideo);
+            ShowPanel(ListViewVideo, ref isToggleVideo, 100);
         }
-        bool isToggleMather;
-        private void Mather_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void ManufacturerBoard_Changed(object sender, TextChangedEventArgs e)
         {
-            ShowPanel(ListViewMather, ref isToggleMather);
+            motherBoard.Manufacturer = (sender as TextBox).Text;
+        }
+        private void ModelBoard_Changed(object sender, TextChangedEventArgs e)
+        {
+            motherBoard.Model = (sender as TextBox).Text;
+        }
+        public double? SetNumerableValue (double? m, TextBox tb)
+        {
+            try
+            {
+                if (tb.Text.Length > 0)
+                    return Convert.ToDouble(tb.Text);
+                else
+                    return null;
+                
+            }
+            catch
+            {
+                tb.Text = m.ToString();
+                return m;
+            }
+        }
+        public int? SetNumerableValue(int? m, TextBox tb)
+        {
+            try
+            {
+                if (tb.Text.Length > 0)
+                    return Convert.ToInt32(tb.Text);
+                else
+                    return null;
+            }
+            catch
+            {
+                tb.Text = m.ToString();
+                return m;
+            }
+        }
+        private void MaxPhysicalMemoryMB_Changed(object sender, TextChangedEventArgs e)
+        {
+
+            motherBoard.MaxPhysicalMemoryMB = SetNumerableValue(motherBoard.MaxPhysicalMemoryMB, sender as TextBox);
+        }
+        private void SlotsMemory_Changed(object sender, TextChangedEventArgs e)
+        {
+
+            motherBoard.SlotsMemory = SetNumerableValue(motherBoard.SlotsMemory, sender as TextBox);
+        }
+        private void MemoryType_Changed(object sender, TextChangedEventArgs e)
+        {
+
+            motherBoard.MemoryType = (sender as TextBox).Text;
+        }
+        private void CanalsMemoryCount_Changed(object sender, TextChangedEventArgs e)
+        {
+
+            motherBoard.CanalsMemoryCount = SetNumerableValue(motherBoard.CanalsMemoryCount, sender as TextBox);
+        }
+        private void ManufacturerProcessor_Changed(object sender, TextChangedEventArgs e)
+        {
+            processor.Manufacturer = (sender as TextBox).Text;
+        }
+        private void ModelProcessor_Changed(object sender, TextChangedEventArgs e)
+        {
+            processor.Model = (sender as TextBox).Text;
+        }
+        private void NumberOfCores_Changed(object sender, TextChangedEventArgs e)
+        {
+            processor.NumberOfCores = SetNumerableValue(processor.NumberOfCores, sender as TextBox);
+        }
+        private void ThreadCount_Changed(object sender, TextChangedEventArgs e)
+        {
+            processor.ThreadCount = SetNumerableValue(processor.ThreadCount, sender as TextBox);
+        }
+        private void StartClockSpeed_Changed(object sender, TextChangedEventArgs e)
+        {
+            processor.StartClockSpeed = SetNumerableValue(processor.StartClockSpeed, sender as TextBox);
+        }
+        private void TechnicalProcess_Changed(object sender, TextChangedEventArgs e)
+        {
+            processor.TechnicalProcess = SetNumerableValue(processor.TechnicalProcess, sender as TextBox);    
+        }
+        private void L1CacheMB_Changed(object sender, TextChangedEventArgs e)
+        {
+            processor.L1CacheMB = SetNumerableValue(processor.L1CacheMB, sender as TextBox);
+        }
+        private void L2CacheMB_Changed(object sender, TextChangedEventArgs e)
+        {
+            processor.L2CacheMB = SetNumerableValue(processor.L2CacheMB, sender as TextBox);
+        }
+        private void L3CacheMB_Changed(object sender, TextChangedEventArgs e)
+        {
+            processor.L3CacheMB = SetNumerableValue(processor.L3CacheMB, sender as TextBox);
+        }
+        private void Board_Click(object sender, RoutedEventArgs e)
+        {
+            ShowPanel(GroupBoard, ref isToggleBoard, 125);
+        }
+        private void Processor_Click(object sender, RoutedEventArgs e)
+        {
+            ShowPanel(GroupProcessor, ref isToggleProcessor, 210);
         }
     }
 }
