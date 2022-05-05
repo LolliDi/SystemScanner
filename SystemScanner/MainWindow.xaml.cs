@@ -28,6 +28,7 @@ namespace SystemScanner
             InitializeComponent();
             ListViewMemory.Height = 0;
             ListViewVideo.Height = 0;
+            ListViewHard.Height = 0;
             string macAddr =
             (
                 from nic in NetworkInterface.GetAllNetworkInterfaces()
@@ -55,9 +56,8 @@ namespace SystemScanner
             StackPanelMather.DataContext = motherBoard;
             StackPanelProcessor.DataContext = processor;
             ListViewMemory.ItemsSource=physicalMemories;
-            
+            ListViewHard.ItemsSource = hardDrives;
             ListViewVideo.ItemsSource = videoControllers;
-            //GetHardWareInfo("Win32_PhysicalMemory");
         }
 
         public void GetInfo()
@@ -280,16 +280,6 @@ namespace SystemScanner
                         default:
                             break;
                     }
-                    //foreach (PropertyData data in obj.Properties)
-                    //{
-
-                    //    if (data.Value != null && !string.IsNullOrEmpty(data.Value.ToString()))
-                    //    {
-
-                    //        //ListViewInfo.Items.Add(new SysInf() { Name = data.Name, Description = data.Value.ToString() });
-
-                    //    }
-                    //}
                 }
 
             }
@@ -374,20 +364,7 @@ namespace SystemScanner
                 toggle = false;
             }
         }
-        //private void stck_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        //{
-        //    ShowPanel(ListViewProcessors, ref isToggleProcessor);
-        //}
-        private void MemoryStck_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            ShowPanel(ListViewMemory, ref isToggleMemory, 100);
-            
-        }
         bool isToggleVideo;
-        private void Video_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            ShowPanel(ListViewVideo, ref isToggleVideo, 100);
-        }
         private void ManufacturerBoard_Changed(object sender, TextChangedEventArgs e)
         {
             motherBoard.Manufacturer = (sender as TextBox).Text;
@@ -490,6 +467,116 @@ namespace SystemScanner
         private void Processor_Click(object sender, RoutedEventArgs e)
         {
             ShowPanel(GroupProcessor, ref isToggleProcessor, 210);
+        }
+        private void MemoryStck_Click(object sender, RoutedEventArgs e)
+        {
+            ShowPanel(ListViewMemory, ref isToggleMemory, physicalMemories.Count*92);
+        }
+        private void Video_Click(object sender, RoutedEventArgs e)
+        {
+            ShowPanel(ListViewVideo, ref isToggleVideo, videoControllers.Count*225);
+        }
+        private void ManufacturerVideo_Changed(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            videoControllers.FirstOrDefault(x=>x.Id == Convert.ToInt32(tb.Uid)).Manufacturer = tb.Text;
+        }
+        private void VideoProc_Changed(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            videoControllers.FirstOrDefault(x => x.Id == Convert.ToInt32(tb.Uid)).VideoProcessor = tb.Text;
+        }
+        private void AdapterRAMMB_Changed(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            VideoControllers vc = videoControllers.FirstOrDefault(x => x.Id == Convert.ToInt32(tb.Uid));
+            vc.AdapterRAMMB = SetNumerableValue(vc.AdapterRAMMB, tb);
+        }
+        private void MaxFPS_Changed(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            VideoControllers vc = videoControllers.FirstOrDefault(x => x.Id == Convert.ToInt32(tb.Uid));
+            vc.MaxRefreshRate = SetNumerableValue(vc.MaxRefreshRate, tb);
+        }
+        private void Vertical_Changed(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            VideoControllers vc = videoControllers.FirstOrDefault(x => x.Id == Convert.ToInt32(tb.Uid));
+            vc.CurrentVerticalResolution = SetNumerableValue(vc.CurrentVerticalResolution, tb);
+
+        }
+        private void Horizontal_Changed(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            VideoControllers vc = videoControllers.FirstOrDefault(x => x.Id == Convert.ToInt32(tb.Uid));
+            vc.CurrentVHorizontalResolution = SetNumerableValue(vc.CurrentVHorizontalResolution, tb);
+        }
+        private void MemFrequency_Changed(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            PhysicalMemory vc = physicalMemories.FirstOrDefault(x => x.Id == Convert.ToInt32(tb.Uid));
+            vc.Frequency = SetNumerableValue(vc.Frequency, tb);
+        }
+        private void MemSize_Changed(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            PhysicalMemory vc = physicalMemories.FirstOrDefault(x => x.Id == Convert.ToInt32(tb.Uid));
+            vc.SizeMB = SetNumerableValue(vc.SizeMB, tb);
+        }
+        private void MemType_Changed(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            physicalMemories.FirstOrDefault(x => x.Id == Convert.ToInt32(tb.Uid)).MemoryType = tb.Text;
+        }
+        bool isToggleHard;
+        private void Hard_Click(object sender, RoutedEventArgs e)
+        {
+            ShowPanel(ListViewHard, ref isToggleHard, hardDrives.Count * 220);
+        }
+        private void Manufacturer_Changed(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            hardDrives.FirstOrDefault(x => x.Id == Convert.ToInt32(tb.Uid)).Manufacturer = tb.Text;
+        }
+        private void Type_Changed(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            hardDrives.FirstOrDefault(x => x.Id == Convert.ToInt32(tb.Uid)).Type = tb.Text;
+        }
+        private void SizeGB_Changed(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            HardDrives vc = hardDrives.FirstOrDefault(x => x.Id == Convert.ToInt32(tb.Uid));
+            vc.SizeGB = SetNumerableValue(vc.SizeGB, tb);
+        }
+        private void Interface_Changed(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            hardDrives.FirstOrDefault(x => x.Id == Convert.ToInt32(tb.Uid)).Interface = tb.Text;
+        }
+        private void SpeedWrite_Changed(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            HardDrives vc = hardDrives.FirstOrDefault(x => x.Id == Convert.ToInt32(tb.Uid));
+            vc.SpeedWriteMBS = SetNumerableValue(vc.SpeedWriteMBS, tb);
+        }
+        private void SpeedRead_Changed(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            HardDrives vc = hardDrives.FirstOrDefault(x => x.Id == Convert.ToInt32(tb.Uid));
+            vc.SpeedReadMBS = SetNumerableValue(vc.SpeedReadMBS, tb);
+        }
+        private void Buffer_Changed(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            HardDrives vc = hardDrives.FirstOrDefault(x => x.Id == Convert.ToInt32(tb.Uid));
+            vc.BufferMB = SetNumerableValue(vc.BufferMB, tb);
+        }
+
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            DBCl.db.SaveChanges();
+            MessageBox.Show("Данные сохранены");
         }
     }
 }
