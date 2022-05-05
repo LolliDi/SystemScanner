@@ -40,6 +40,7 @@ namespace SystemScanner
         public Nullable<bool> HDMI { get; set; }
         public string EthernetController { get; set; }
         public string AudioController { get; set; }
+        public string ChipSet { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Computers> Computers { get; set; }

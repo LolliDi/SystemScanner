@@ -26,40 +26,61 @@ namespace SystemScanner
         public MainWindow()
         {
             InitializeComponent();
-            ListViewMemory.Height = 0;
-            ListViewVideo.Height = 0;
-            ListViewHard.Height = 0;
-            string macAddr =
-            (
-                from nic in NetworkInterface.GetAllNetworkInterfaces()
-                where nic.OperationalStatus == OperationalStatus.Up
-                select nic.GetPhysicalAddress().ToString()
-            ).FirstOrDefault();
-            computer = DBCl.db.Computers.FirstOrDefault(c => c.MacAdress == macAddr);
-            if (computer != null)
+            try
             {
-                idPC = computer.id;
-            }
-            else
-            {
-                computer = new Computers()
+                ListViewMemory.Height = 0;
+                ListViewVideo.Height = 0;
+                ListViewHard.Height = 0;
+                string macAddr =
+                (
+                    from nic in NetworkInterface.GetAllNetworkInterfaces()
+                    where nic.OperationalStatus == OperationalStatus.Up
+                    select nic.GetPhysicalAddress().ToString()
+                ).FirstOrDefault();
+                
+                computer = DBCl.db.Computers.FirstOrDefault(c => c.MacAdress == macAddr);
+                if (computer != null)
                 {
-                    MacAdress = macAddr,
-                };
-                DBCl.db.Computers.Add(computer);
+                    idPC = computer.id;
+                }
+                else
+                {
+                    computer = new Computers()
+                    {
+                        MacAdress = macAddr,
+                    };
+                    DBCl.db.Computers.Add(computer);
+                    DBCl.db.SaveChanges();
+                    idPC = computer.id;
+                }
+                GetInfo();
+                computer.DateCheck = DateTime.Now;
                 DBCl.db.SaveChanges();
-                idPC = computer.id;
+                UpdateContexts();
+
+                MessageBox.Show("Данные считаны и записаны в БД");
             }
-            GetInfo();
-            computer.DateCheck = DateTime.Now;
-            DBCl.db.SaveChanges();
+            catch (Exception ex)
+            {
+                MessageBox.Show("Произошла ошибка, проверьте подключение к интернету.\nИнформация: " + ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public void UpdateContexts()
+        {
+            
             StackPanelMather.DataContext = motherBoard;
+            StckComputer.DataContext = computer;
             StackPanelProcessor.DataContext = processor;
-            ListViewMemory.ItemsSource=physicalMemories;
+            ListViewMemory.Items.Refresh();
+            ListViewMemory.ItemsSource = physicalMemories;
+            ListViewHard.Items.Refresh();
             ListViewHard.ItemsSource = hardDrives;
+            ListViewVideo.Items.Refresh();
             ListViewVideo.ItemsSource = videoControllers;
         }
 
+        #region GetHardwareInfo
         public void GetInfo()
         {
             GetHardWareInfo("Win32_Processor");
@@ -81,17 +102,17 @@ namespace SystemScanner
                     IdPC = idPC,
                     IdVideo = v.Id,
                 });
-               
+
             }
             DBCl.db.SaveChanges();
-            List<PhysicalMemory> pm = DBCl.db.PhysicalMemory.Where(x=>x.IdPC==idPC).ToList();
+            List<PhysicalMemory> pm = DBCl.db.PhysicalMemory.Where(x => x.IdPC == idPC).ToList();
             foreach (PhysicalMemory mem in pm)
             {
                 DBCl.db.PhysicalMemory.Remove(mem);
             }
             DBCl.db.SaveChanges();
             GetHardWareInfo("Win32_PhysicalMemory");
-            foreach(PhysicalMemory mem in physicalMemories)
+            foreach (PhysicalMemory mem in physicalMemories)
             {
                 DBCl.db.PhysicalMemory.Add(mem);
             }
@@ -109,12 +130,13 @@ namespace SystemScanner
             DBCl.db.SaveChanges();
             foreach (HardDrives v in hardDrives)
             {
-                DBCl.db.ComputerHard.Add(new ComputerHard() { IdPC = idPC, IdHard = v.Id});
+                DBCl.db.ComputerHard.Add(new ComputerHard() { IdPC = idPC, IdHard = v.Id });
             }
             DBCl.db.SaveChanges();
             GetHardWareInfo("Win32_OperatingSystem");
             GetHardWareInfo("Win32_BaseBoard");
         }
+
 
         public List<string> GetHardwareInfo(string WIN32_Class, string ClassItemField)
         {
@@ -166,8 +188,8 @@ namespace SystemScanner
                             double l1CacheMB = Convert.ToDouble(GetHardwareInfo("Win32_CacheMemory", "MaxCacheSize")[0].ToString().Trim()) / 1024;
                             double l2CacheMB = Convert.ToDouble(obj["L2CacheSize"].ToString().Trim()) / 1024;
                             double l3CacheMB = Convert.ToDouble(obj["L3CacheSize"].ToString().Trim()) / 1024;
-                            processor = DBCl.db.Processors.FirstOrDefault(x=>x.Model == model);
-                            if(processor == null)
+                            processor = DBCl.db.Processors.FirstOrDefault(x => x.Model == model);
+                            if (processor == null)
                             {
                                 processor = new Processors()
                                 {
@@ -180,38 +202,33 @@ namespace SystemScanner
                                     L3CacheMB = l3CacheMB,
                                 };
                                 DBCl.db.Processors.Add(processor);
-                                
+
                             }
                             computer.ProcessorId = processor.Id;
                             DBCl.db.SaveChanges();
                             return;
                         case "Win32_VideoController":
                             string manufacturer = obj["AdapterCompatibility"].ToString().Trim();
-                             string   modelVideo = obj["Caption"].ToString().Trim();
+                            string modelVideo = obj["Caption"].ToString().Trim();
                             string videoProcessor = obj["VideoProcessor"].ToString().Trim();
                             double adapterRAMMB = Convert.ToDouble(obj["AdapterRAM"].ToString().Trim()) / 1024 / 1024;
-                            double maxRefreshRate = Convert.ToDouble(obj["MaxRefreshRate"].ToString().Trim());
-                            int currentVerticalResolution = Convert.ToInt32(obj["CurrentVerticalResolution"].ToString().Trim());
-                            int currentVHorizontalResolution = Convert.ToInt32(obj["CurrentHorizontalResolution"].ToString().Trim());
-                            VideoControllers v = DBCl.db.VideoControllers.FirstOrDefault(x =>x.Manufacturer==manufacturer&&x.Model==modelVideo);
+                            VideoControllers v = DBCl.db.VideoControllers.FirstOrDefault(x => x.Manufacturer == manufacturer && x.Model == modelVideo);
                             if (v == null)
                             {
-                                v = new VideoControllers(){
+                                v = new VideoControllers()
+                                {
                                     Manufacturer = manufacturer,
                                     Model = modelVideo,
                                     VideoProcessor = videoProcessor,
-                                    AdapterRAMMB = adapterRAMMB,
-                                    MaxRefreshRate = maxRefreshRate,
-                                    CurrentVerticalResolution = currentVerticalResolution,
-                                    CurrentVHorizontalResolution = currentVHorizontalResolution,
+                                    AdapterRAMMB = adapterRAMMB
                                 };
                                 DBCl.db.VideoControllers.Add(v);
                                 DBCl.db.SaveChanges();
-                                 
+
                             }
                             videoControllers.Add(v);
-                            
-                            
+
+
                             break;
                         case "Win32_PhysicalMemory":
 
@@ -227,7 +244,7 @@ namespace SystemScanner
                             string modelDisk = obj["Caption"].ToString().Trim();
                             long sizeGB = Convert.ToInt64(obj["Size"].ToString().Trim()) / 1000000000;
                             HardDrives hd = DBCl.db.HardDrives.FirstOrDefault(x => x.Model == modelDisk);
-                            if(hd == null)
+                            if (hd == null)
                             {
                                 hd = new HardDrives()
                                 {
@@ -244,7 +261,8 @@ namespace SystemScanner
                             string modelMother = obj["Product"].ToString().Trim();
                             int maxPhysicalMemoryMB = Convert.ToInt32(GetHardwareInfo("Win32_PhysicalMemoryArray", "maxCapacity")[0]) / 1024;
                             int slotsMemory = Convert.ToInt32(GetHardwareInfo("Win32_PhysicalMemoryArray", "MemoryDevices")[0]);
-                            motherBoard = DBCl.db.MotherBoards.FirstOrDefault(x => x.Model == modelMother&&x.Manufacturer==manufacturerMother);
+                            string chip = GetHardwareInfo("Win32_Processor", "SocketDesignation")[0];
+                            motherBoard = DBCl.db.MotherBoards.FirstOrDefault(x => x.Model == modelMother && x.Manufacturer == manufacturerMother);
                             if (motherBoard == null)
                             {
                                 motherBoard = new MotherBoards()
@@ -254,9 +272,10 @@ namespace SystemScanner
                                     MaxPhysicalMemoryMB = maxPhysicalMemoryMB,
                                     SlotsMemory = slotsMemory,
                                     MemoryType = physicalMemories[0].MemoryType,
+                                    ChipSet = chip,
                                 };
                                 DBCl.db.MotherBoards.Add(motherBoard);
-                                
+
                             }
                             computer.MotherBoardId = motherBoard.Id;
                             DBCl.db.SaveChanges();
@@ -324,10 +343,14 @@ namespace SystemScanner
             }
             return outValue;
         }
+        #endregion
+
+        #region EditInformationAndViews
         private bool isToggleProcessor;
         private bool isToggleMemory;
         bool isToggleBoard;
-        private void ShowPanel(ListView sp, ref bool toggle, int height)
+
+        private void ShowPanel(ListView sp, ref bool toggle, int height, Button btn)
         {
             DoubleAnimation da = new DoubleAnimation();
             if (!toggle)
@@ -336,6 +359,7 @@ namespace SystemScanner
                 da.Duration = TimeSpan.FromSeconds(0.25);
                 sp.BeginAnimation(Border.HeightProperty, da);
                 toggle = true;
+                btn.Content = "/\\";
             }
             else
             {
@@ -343,9 +367,10 @@ namespace SystemScanner
                 da.Duration = TimeSpan.FromSeconds(0.25);
                 sp.BeginAnimation(Border.HeightProperty, da);
                 toggle = false;
+                btn.Content = "\\/";
             }
         }
-        private void ShowPanel(GroupBox sp, ref bool toggle, int height)
+        private void ShowPanel(GroupBox sp, ref bool toggle, int height, Button btn)
         {
             DoubleAnimation da = new DoubleAnimation();
             if (!toggle)
@@ -354,6 +379,7 @@ namespace SystemScanner
                 da.Duration = TimeSpan.FromSeconds(0.25);
                 sp.BeginAnimation(Border.HeightProperty, da);
                 toggle = true;
+                btn.Content = "/\\";
             }
             else
             {
@@ -362,6 +388,7 @@ namespace SystemScanner
                 da.Duration = TimeSpan.FromSeconds(0.25);
                 sp.BeginAnimation(Border.HeightProperty, da);
                 toggle = false;
+                btn.Content = "\\/";
             }
         }
         bool isToggleVideo;
@@ -369,11 +396,15 @@ namespace SystemScanner
         {
             motherBoard.Manufacturer = (sender as TextBox).Text;
         }
+        private void Socket_Changed(object sender, TextChangedEventArgs e)
+        {
+            motherBoard.ChipSet = (sender as TextBox).Text;
+        }
         private void ModelBoard_Changed(object sender, TextChangedEventArgs e)
         {
             motherBoard.Model = (sender as TextBox).Text;
         }
-        public double? SetNumerableValue (double? m, TextBox tb)
+        public double? SetNumerableValue(double? m, TextBox tb)
         {
             try
             {
@@ -381,7 +412,7 @@ namespace SystemScanner
                     return Convert.ToDouble(tb.Text);
                 else
                     return null;
-                
+
             }
             catch
             {
@@ -446,7 +477,7 @@ namespace SystemScanner
         }
         private void TechnicalProcess_Changed(object sender, TextChangedEventArgs e)
         {
-            processor.TechnicalProcess = SetNumerableValue(processor.TechnicalProcess, sender as TextBox);    
+            processor.TechnicalProcess = SetNumerableValue(processor.TechnicalProcess, sender as TextBox);
         }
         private void L1CacheMB_Changed(object sender, TextChangedEventArgs e)
         {
@@ -462,24 +493,24 @@ namespace SystemScanner
         }
         private void Board_Click(object sender, RoutedEventArgs e)
         {
-            ShowPanel(GroupBoard, ref isToggleBoard, 125);
+            ShowPanel(GroupBoard, ref isToggleBoard, 125, BtnBoard);
         }
         private void Processor_Click(object sender, RoutedEventArgs e)
         {
-            ShowPanel(GroupProcessor, ref isToggleProcessor, 210);
+            ShowPanel(GroupProcessor, ref isToggleProcessor, 210, BtnProcessor);
         }
         private void MemoryStck_Click(object sender, RoutedEventArgs e)
         {
-            ShowPanel(ListViewMemory, ref isToggleMemory, physicalMemories.Count*92);
+            ShowPanel(ListViewMemory, ref isToggleMemory, physicalMemories.Count * 92, BtnRAM);
         }
         private void Video_Click(object sender, RoutedEventArgs e)
         {
-            ShowPanel(ListViewVideo, ref isToggleVideo, videoControllers.Count*225);
+            ShowPanel(ListViewVideo, ref isToggleVideo, videoControllers.Count * 135, BtnVideo);
         }
         private void ManufacturerVideo_Changed(object sender, TextChangedEventArgs e)
         {
             TextBox tb = sender as TextBox;
-            videoControllers.FirstOrDefault(x=>x.Id == Convert.ToInt32(tb.Uid)).Manufacturer = tb.Text;
+            videoControllers.FirstOrDefault(x => x.Id == Convert.ToInt32(tb.Uid)).Manufacturer = tb.Text;
         }
         private void VideoProc_Changed(object sender, TextChangedEventArgs e)
         {
@@ -531,7 +562,7 @@ namespace SystemScanner
         bool isToggleHard;
         private void Hard_Click(object sender, RoutedEventArgs e)
         {
-            ShowPanel(ListViewHard, ref isToggleHard, hardDrives.Count * 220);
+            ShowPanel(ListViewHard, ref isToggleHard, hardDrives.Count * 220, BtnHard);
         }
         private void Manufacturer_Changed(object sender, TextChangedEventArgs e)
         {
@@ -572,11 +603,45 @@ namespace SystemScanner
             HardDrives vc = hardDrives.FirstOrDefault(x => x.Id == Convert.ToInt32(tb.Uid));
             vc.BufferMB = SetNumerableValue(vc.BufferMB, tb);
         }
-
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             DBCl.db.SaveChanges();
             MessageBox.Show("Данные сохранены");
         }
+        private void CompName_Changed(object sender, TextChangedEventArgs e)
+        {
+            computer.Name = (sender as TextBox).Text;
+        }
+        private void Room_Changed(object sender, TextChangedEventArgs e)
+        {
+            computer.RoomNumber = (sender as TextBox).Text;
+        }
+        private void Description_Changed(object sender, TextChangedEventArgs e)
+        {
+            computer.Description = (sender as TextBox).Text;
+        }
+        #endregion
+
+        private void ReloadInfo_Click(object sender, RoutedEventArgs e)
+        {
+            DBCl.db = new Entities1();
+            computer = DBCl.db.Computers.FirstOrDefault(x => x.id == idPC);
+            motherBoard = DBCl.db.MotherBoards.FirstOrDefault(x => x.Id == computer.MotherBoardId);
+            processor = DBCl.db.Processors.FirstOrDefault(x=>x.Id == computer.ProcessorId);
+            physicalMemories = DBCl.db.PhysicalMemory.Where(x => x.IdPC == idPC).ToList();
+            hardDrives.Clear();
+            foreach(ComputerHard ch in DBCl.db.ComputerHard.Where(x => x.IdPC == idPC).ToList())
+            {
+                hardDrives.Add(DBCl.db.HardDrives.FirstOrDefault(x => x.Id == ch.IdHard));
+            }
+            videoControllers.Clear();
+            foreach (ComputersVideo ch in DBCl.db.ComputersVideo.Where(x => x.IdPC == idPC).ToList())
+            {
+                videoControllers.Add(DBCl.db.VideoControllers.FirstOrDefault(x => x.Id == ch.IdVideo));
+            }
+            UpdateContexts();
+        }
+
+        
     }
 }

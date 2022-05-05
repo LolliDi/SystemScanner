@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Хранилище Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ComputerHard">
           <Key>
             <PropertyRef Name="Id" />
@@ -59,6 +59,7 @@
           <Property Name="MemoryType" Type="nvarchar" MaxLength="50" />
           <Property Name="MaxPhysicalMemoryMB" Type="float" />
           <Property Name="CanalsMemoryCount" Type="int" />
+          <Property Name="ChipSet" Type="nvarchar" MaxLength="100" />
           <Property Name="SlotsPCI" Type="int" />
           <Property Name="SlotsPCIEx1" Type="int" />
           <Property Name="SlotsPCIE30x16" Type="int" />
@@ -287,8 +288,7 @@
             <End Role="PhysicalMemory" EntitySet="PhysicalMemory" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -371,6 +371,7 @@
           <Property Name="EthernetController" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="AudioController" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Computers" Relationship="Self.FK_Computers_MotherBoards" FromRole="MotherBoards" ToRole="Computers" />
+          <Property Name="ChipSet" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="OS">
           <Key>
@@ -646,6 +647,7 @@
           <EntitySetMapping Name="MotherBoards">
             <EntityTypeMapping TypeName="Model.MotherBoards">
               <MappingFragment StoreEntitySet="MotherBoards">
+                <ScalarProperty Name="ChipSet" ColumnName="ChipSet" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Manufacturer" ColumnName="Manufacturer" />
                 <ScalarProperty Name="Model" ColumnName="Model" />
