@@ -63,7 +63,6 @@
                                     <TextBox Text="{Binding Model}" TextChanged="ModelBoard_Changed" Width="300">
                                     </TextBox>
                                 </GroupBox>
-
                             </StackPanel>
                             
                             <GroupBox Header="Характеристики" Name="GroupBoard" Height="0">
@@ -147,13 +146,13 @@
                     <StackPanel>
                         <TextBlock FontSize="20" HorizontalAlignment="Center">Видеокарты</TextBlock>
                         <StackPanel Orientation="Vertical">
-                            <ListView Name="ListViewVideo" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                                <ListView.ItemsPanel>
+                            <ItemsControl Name="ListViewVideo" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel Orientation="Vertical" HorizontalAlignment="Center"/>
                                     </ItemsPanelTemplate>
-                                </ListView.ItemsPanel>
-                                <ListView.ItemTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel HorizontalAlignment="Center">
                                             <GroupBox Header="{Binding Model}">
@@ -173,8 +172,8 @@
                                             </GroupBox>
                                         </StackPanel>
                                     </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                         </StackPanel>
                         <Button Background="Transparent" Name="BtnVideo" Content="\/" BorderThickness="0" Click="Video_Click"></Button>
                     </StackPanel>
@@ -184,13 +183,13 @@
                     <TextBlock FontSize="20" HorizontalAlignment="Center">Оперативная память</TextBlock>
                     
                     <StackPanel Orientation="Vertical">
-                        <ListView Name="ListViewMemory" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                            <ListView.ItemsPanel>
+                        <ItemsControl Name="ListViewMemory" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                            <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel Orientation="Vertical" HorizontalAlignment="Center"/>
                                 </ItemsPanelTemplate>
-                            </ListView.ItemsPanel>
-                            <ListView.ItemTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
                                 <DataTemplate>
 
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -206,8 +205,8 @@
 
                                     </StackPanel>
                                 </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </StackPanel>
                     <Button Background="Transparent" Name="BtnRAM" Content="\/" BorderThickness="0" Click="MemoryStck_Click"></Button>
                 </StackPanel>
@@ -216,13 +215,13 @@
                         <TextBlock FontSize="20" HorizontalAlignment="Center">Жесткие диски</TextBlock>
                         
                         <StackPanel Orientation="Vertical">
-                            <ListView Name="ListViewHard" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                                <ListView.ItemsPanel>
+                            <ItemsControl Name="ListViewHard" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel Orientation="Vertical" HorizontalAlignment="Center"/>
                                     </ItemsPanelTemplate>
-                                </ListView.ItemsPanel>
-                                <ListView.ItemTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel HorizontalAlignment="Center">
                                             <GroupBox Header="{Binding Model}">
@@ -256,8 +255,8 @@
                                             </GroupBox>
                                         </StackPanel>
                                     </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                         </StackPanel>
                         <Button Background="Transparent" Name="BtnHard" Content="\/" BorderThickness="0" Click="Hard_Click"></Button>
                     </StackPanel>

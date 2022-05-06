@@ -359,7 +359,7 @@ namespace SystemScanner
         private bool isToggleMemory;
         bool isToggleBoard;
 
-        private void ShowPanel(ListView sp, ref bool toggle, int height, Button btn)
+        private void ShowPanel(ItemsControl sp, ref bool toggle, int height, Button btn)
         {
             DoubleAnimation da = new DoubleAnimation();
             if (!toggle)
