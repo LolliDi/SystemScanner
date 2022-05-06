@@ -68,6 +68,7 @@ namespace SystemScanner
 
         public void UpdateContexts() //обновляем данные для отображения
         {
+            OSinfo.DataContext = oS;
             StackPanelMather.DataContext = motherBoard;
             StckComputer.DataContext = computer;
             StackPanelProcessor.DataContext = processor;

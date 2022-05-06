@@ -33,11 +33,22 @@
                     </StackPanel>
                     <StackPanel Orientation="Vertical">
                         <GroupBox Header="Заметки">
-                            <TextBox Text="{Binding Description}" Width="550" Height="113" TextWrapping="Wrap" VerticalContentAlignment="Top" TextChanged="Description_Changed"/>
+                            <TextBox Text="{Binding Description}" Width="550" Height="115" TextWrapping="Wrap" VerticalContentAlignment="Top" TextChanged="Description_Changed"/>
                         </GroupBox>
-                        <GroupBox Header="Дата проверки" Width="160" HorizontalAlignment="Right">
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Name="OSinfo" Orientation="Horizontal" HorizontalAlignment="Center">
+                                <GroupBox Header="ОС">
+                                    <TextBox IsReadOnly="True" Text="{Binding Title}" Width="240" HorizontalContentAlignment="Center"/>
+                                </GroupBox>
+                                <GroupBox Header="Архитектура">
+                                    <TextBox IsReadOnly="True" Text="{Binding Architecture}" Width="105" HorizontalContentAlignment="Center"/>
+                                </GroupBox>
+
+                            </StackPanel>
+                            <GroupBox Header="Дата проверки" Margin="20,5,5,5">
                             <TextBox IsReadOnly="True" Text="{Binding DateCheck, StringFormat=\{0:dd.MM.yy HH:mm\}}" Width="130" HorizontalContentAlignment="Center"/>
                         </GroupBox>
+                        </StackPanel>
                     </StackPanel>
                 </StackPanel>
                 <Border BorderThickness="0,1" BorderBrush="Gray" Panel.ZIndex="1">
