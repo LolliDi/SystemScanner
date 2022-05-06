@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SystemScanner"
         mc:Ignorable="d"
-        Title="MainWindow" Width="1000" Height="700" ResizeMode="NoResize">
+        Icon="Resources/pcIcon.png"
+        Title="ПК сканер" Width="1000" Height="700" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
