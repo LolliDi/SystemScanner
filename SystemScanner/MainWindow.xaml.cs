@@ -66,9 +66,8 @@ namespace SystemScanner
             }
         }
 
-        public void UpdateContexts()
+        public void UpdateContexts() //обновляем данные для отображения
         {
-            
             StackPanelMather.DataContext = motherBoard;
             StckComputer.DataContext = computer;
             StackPanelProcessor.DataContext = processor;
@@ -81,56 +80,67 @@ namespace SystemScanner
         }
 
         #region GetHardwareInfo
-        public void GetInfo()
+        public void GetInfo() //собираем информацию о текущем ПК
         {
             GetHardWareInfo("Win32_Processor");
             GetHardWareInfo("Win32_VideoController");
-
-            foreach (VideoControllers v in videoControllers)
+            List<ComputersVideo> c = DBCl.db.ComputersVideo.Where(x => x.IdPC == idPC).ToList();
+            foreach(VideoControllers v in videoControllers) //смотрим каких связей не хватает в таблице и добавляем
             {
-                ComputersVideo cv = DBCl.db.ComputersVideo.FirstOrDefault(x => x.IdPC == idPC && x.IdVideo == v.Id);
-                if (cv != null)
+                ComputersVideo cv = c.FirstOrDefault(x => x.IdVideo == v.Id);
+                if(cv==null)
                 {
-                    DBCl.db.ComputersVideo.Remove(cv);
+                    DBCl.db.ComputersVideo.Add(new ComputersVideo()
+                    {
+                        IdPC = idPC,
+                        IdVideo = v.Id,
+                    });
+                }
+            }
+            foreach(ComputersVideo v in c) //смотрим какие лишние и удаляем
+            {
+                VideoControllers vc = videoControllers.FirstOrDefault(x => x.Id == v.IdVideo);
+                if(vc==null)
+                {
+                    DBCl.db.ComputersVideo.Remove(v);
                 }
             }
             DBCl.db.SaveChanges();
-            foreach (VideoControllers v in videoControllers)
-            {
-                DBCl.db.ComputersVideo.Add(new ComputersVideo()
-                {
-                    IdPC = idPC,
-                    IdVideo = v.Id,
-                });
-
-            }
-            DBCl.db.SaveChanges();
+            
             List<PhysicalMemory> pm = DBCl.db.PhysicalMemory.Where(x => x.IdPC == idPC).ToList();
-            foreach (PhysicalMemory mem in pm)
+            foreach (PhysicalMemory mem in pm) //удаляем все плашки ОП для этого пк
             {
                 DBCl.db.PhysicalMemory.Remove(mem);
             }
             DBCl.db.SaveChanges();
             GetHardWareInfo("Win32_PhysicalMemory");
-            foreach (PhysicalMemory mem in physicalMemories)
+            foreach (PhysicalMemory mem in physicalMemories) //добавляем текущие
             {
                 DBCl.db.PhysicalMemory.Add(mem);
             }
             DBCl.db.SaveChanges();
 
             GetHardWareInfo("Win32_DiskDrive");
-            foreach (HardDrives v in hardDrives)
+            List<ComputerHard> ch = DBCl.db.ComputerHard.Where(x => x.IdPC == idPC).ToList();
+            foreach (HardDrives hd in hardDrives) //смотрим каких связей не хватает в таблице и добавляем
             {
-                ComputerHard cv = DBCl.db.ComputerHard.FirstOrDefault(x => x.IdPC == idPC && x.IdHard == v.Id);
-                if (cv != null)
+                ComputerHard cv = ch.FirstOrDefault(x => x.IdHard == hd.Id);
+                if (cv == null)
                 {
-                    DBCl.db.ComputerHard.Remove(cv);
+                    DBCl.db.ComputerHard.Add(new ComputerHard()
+                    {
+                        IdPC = idPC,
+                        IdHard = hd.Id,
+                    });
                 }
             }
-            DBCl.db.SaveChanges();
-            foreach (HardDrives v in hardDrives)
+            foreach (ComputerHard v in ch) //смотрим какие лишние и удаляем
             {
-                DBCl.db.ComputerHard.Add(new ComputerHard() { IdPC = idPC, IdHard = v.Id });
+                HardDrives hd = hardDrives.FirstOrDefault(x => x.Id == v.IdHard);
+                if (hd == null)
+                {
+                    DBCl.db.ComputerHard.Remove(v);
+                }
             }
             DBCl.db.SaveChanges();
             GetHardWareInfo("Win32_OperatingSystem");
@@ -138,7 +148,7 @@ namespace SystemScanner
         }
 
 
-        public List<string> GetHardwareInfo(string WIN32_Class, string ClassItemField)
+        public List<string> GetHardwareInfo(string WIN32_Class, string ClassItemField) //получение определенного параметра системы
         {
             List<string> result = new List<string>();
 
@@ -162,10 +172,8 @@ namespace SystemScanner
             return result;
         }
 
-        private void GetHardWareInfo(string key)
+        private void GetHardWareInfo(string key) //получение всей инфы о ключе
         {
-            //ListViewInfo.Items.Clear();
-
             ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM " + key);
             try
             {
@@ -307,13 +315,13 @@ namespace SystemScanner
 
         }
 
-        public string GetMemoryType(int type)
+        public string GetMemoryType(int type) //тип оперативной памяти
         {
             string outValue = string.Empty;
 
             switch (type)
             {
-                case 0x0: outValue = "DDR4+"; break;
+                case 0x0: outValue = "DDR4"; break;
                 case 0x1: outValue = "Other"; break;
                 case 0x2: outValue = "DRAM"; break;
                 case 0x3: outValue = "Synchronous DRAM"; break;
@@ -624,22 +632,30 @@ namespace SystemScanner
 
         private void ReloadInfo_Click(object sender, RoutedEventArgs e)
         {
-            DBCl.db = new Entities1();
-            computer = DBCl.db.Computers.FirstOrDefault(x => x.id == idPC);
-            motherBoard = DBCl.db.MotherBoards.FirstOrDefault(x => x.Id == computer.MotherBoardId);
-            processor = DBCl.db.Processors.FirstOrDefault(x=>x.Id == computer.ProcessorId);
-            physicalMemories = DBCl.db.PhysicalMemory.Where(x => x.IdPC == idPC).ToList();
-            hardDrives.Clear();
-            foreach(ComputerHard ch in DBCl.db.ComputerHard.Where(x => x.IdPC == idPC).ToList())
+            try
             {
-                hardDrives.Add(DBCl.db.HardDrives.FirstOrDefault(x => x.Id == ch.IdHard));
+                DBCl.db = new Entities1();
+                computer = DBCl.db.Computers.FirstOrDefault(x => x.id == idPC);
+                motherBoard = DBCl.db.MotherBoards.FirstOrDefault(x => x.Id == computer.MotherBoardId);
+                processor = DBCl.db.Processors.FirstOrDefault(x => x.Id == computer.ProcessorId);
+                physicalMemories = DBCl.db.PhysicalMemory.Where(x => x.IdPC == idPC).ToList();
+                hardDrives.Clear();
+                foreach (ComputerHard ch in DBCl.db.ComputerHard.Where(x => x.IdPC == idPC).ToList())
+                {
+                    hardDrives.Add(DBCl.db.HardDrives.FirstOrDefault(x => x.Id == ch.IdHard));
+                }
+                videoControllers.Clear();
+                foreach (ComputersVideo ch in DBCl.db.ComputersVideo.Where(x => x.IdPC == idPC).ToList())
+                {
+                    videoControllers.Add(DBCl.db.VideoControllers.FirstOrDefault(x => x.Id == ch.IdVideo));
+                }
+                UpdateContexts();
+                MessageBox.Show("Несохраненные изменения сброшены");
             }
-            videoControllers.Clear();
-            foreach (ComputersVideo ch in DBCl.db.ComputersVideo.Where(x => x.IdPC == idPC).ToList())
+            catch (Exception ex)
             {
-                videoControllers.Add(DBCl.db.VideoControllers.FirstOrDefault(x => x.Id == ch.IdVideo));
+                MessageBox.Show("Произошла ошибка:\n"+ex,"Ошибка",MessageBoxButton.OK,MessageBoxImage.Error);
             }
-            UpdateContexts();
         }
 
         
