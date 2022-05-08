@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Management;
+using System.Net;
 using System.Net.NetworkInformation;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
@@ -53,6 +55,11 @@ namespace SystemScanner
                     DBCl.db.SaveChanges();
                     idPC = computer.id;
                 }
+                computer.Users = GetUserList();
+                computer.IpInternet = new WebClient().DownloadString("https://api.ipify.org"); //получаем с сайта свой ип
+                computer.PCName = Dns.GetHostName();
+                computer.UserNick = Environment.UserName;
+                computer.IpLocal = GetLocalIp();
                 GetInfo();
                 computer.DateCheck = DateTime.Now;
                 DBCl.db.SaveChanges();
@@ -64,6 +71,36 @@ namespace SystemScanner
             {
                 MessageBox.Show("Произошла ошибка, проверьте подключение к интернету.\nИнформация: " + ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        public string GetLocalIp()
+        {
+            var ips = Dns.GetHostAddresses(Dns.GetHostName());
+            Regex r = new Regex(@"\A192\.168\.");
+            foreach (IPAddress ip in ips)
+            {
+                if (r.IsMatch(ip.ToString()))
+                {
+                    return ip.ToString();
+                }
+            }
+            return "";
+        }
+
+        public string GetUserList()
+        {
+            string s = "";
+            string p = "";
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher(new SelectQuery("Win32_UserAccount"));
+            foreach (ManagementObject envVar in searcher.Get())
+            {
+                p = envVar["Name"] + "";
+                if (p != "DefaultAccount" && p != "WDAGUtilityAccount")
+                {
+                    s += p + ", ";
+                }
+            }
+            return s.Substring(0,s.Length-2);
         }
 
         public void UpdateContexts() //обновляем данные для отображения
@@ -401,6 +438,11 @@ namespace SystemScanner
             }
         }
         bool isToggleVideo;
+        bool isToggleOSInfo;
+        private void BtnOSInfo_Click(object sender, RoutedEventArgs e)
+        {
+            ShowPanel(GroupOSInfo, ref isToggleOSInfo, 210, BtnOSInfo);
+        }
         private void ManufacturerBoard_Changed(object sender, TextChangedEventArgs e)
         {
             motherBoard.Manufacturer = (sender as TextBox).Text;

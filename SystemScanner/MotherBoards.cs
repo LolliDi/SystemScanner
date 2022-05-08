@@ -27,6 +27,7 @@ namespace SystemScanner
         public string MemoryType { get; set; }
         public Nullable<double> MaxPhysicalMemoryMB { get; set; }
         public Nullable<int> CanalsMemoryCount { get; set; }
+        public string ChipSet { get; set; }
         public Nullable<int> SlotsPCI { get; set; }
         public Nullable<int> SlotsPCIEx1 { get; set; }
         public Nullable<int> SlotsPCIE30x16 { get; set; }
@@ -40,7 +41,6 @@ namespace SystemScanner
         public Nullable<bool> HDMI { get; set; }
         public string EthernetController { get; set; }
         public string AudioController { get; set; }
-        public string ChipSet { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Computers> Computers { get; set; }

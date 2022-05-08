@@ -25,9 +25,14 @@ namespace SystemScanner
     
         public int id { get; set; }
         public string MacAdress { get; set; }
+        public string PCName { get; set; }
+        public string UserNick { get; set; }
+        public string IpInternet { get; set; }
+        public string IpLocal { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string RoomNumber { get; set; }
+        public string Users { get; set; }
         public Nullable<int> MotherBoardId { get; set; }
         public Nullable<int> ProcessorId { get; set; }
         public Nullable<System.DateTime> DateCheck { get; set; }
