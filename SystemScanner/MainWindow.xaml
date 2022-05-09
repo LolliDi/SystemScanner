@@ -213,7 +213,7 @@
                     <TextBlock FontSize="20" HorizontalAlignment="Center">Оперативная память</TextBlock>
                     
                     <StackPanel Orientation="Vertical">
-                        <ItemsControl Name="ListViewMemory" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                        <ItemsControl Height="0" Name="ListViewMemory" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel Orientation="Vertical" HorizontalAlignment="Center"/>
