@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.DirectoryServices;
 using System.Linq;
 using System.Management;
 using System.Net;
@@ -90,18 +91,18 @@ namespace SystemScanner
         public string GetUserList()
         {
             string s = "";
-            string p = "";
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher(new SelectQuery("Win32_UserAccount"));
-            foreach (ManagementObject envVar in searcher.Get())
+            DirectoryEntry localMachine = new DirectoryEntry("WinNT://" + Environment.MachineName);
+            foreach (DirectoryEntry child in localMachine.Children)
             {
-                p = envVar["Name"] + "";
-                if (p != "DefaultAccount" && p != "WDAGUtilityAccount")
+                if (child.SchemaClassName == "User" && child.Name != "DefaultAccount" && child.Name != "WDAGUtilityAccount")
                 {
-                    s += p + ", ";
+                    s += child.Name + ", ";
                 }
             }
             return s.Substring(0,s.Length-2);
         }
+
+
 
         public void UpdateContexts() //обновляем данные для отображения
         {
@@ -662,6 +663,10 @@ namespace SystemScanner
         private void CompName_Changed(object sender, TextChangedEventArgs e)
         {
             computer.Name = (sender as TextBox).Text;
+        }
+        private void CompNumber_Changed(object sender, TextChangedEventArgs e)
+        {
+            computer.InventoryNumber = (sender as TextBox).Text;
         }
         private void Room_Changed(object sender, TextChangedEventArgs e)
         {

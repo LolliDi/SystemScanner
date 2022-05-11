@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Icon="Resources/pcIcon.png"
         Title="ПК сканер" Width="1000" Height="700" ResizeMode="NoResize">
-    <Grid>
+    <Grid Background="AliceBlue">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="40"/>
@@ -28,8 +28,8 @@
                             <GroupBox Header="Кабинет">
                                 <TextBox Text="{Binding RoomNumber}" Width="200" TextChanged="Room_Changed"/>
                             </GroupBox>
-                            <GroupBox Header="Ip">
-                                <TextBox IsReadOnly="True" Text="{Binding IpInternet}" Width="200"/>
+                            <GroupBox Header="Инвентарный номер">
+                                <TextBox Text="{Binding InventoryNumber}" TextChanged="CompNumber_Changed" Width="200"/>
                             </GroupBox>
                         </StackPanel>
                         <StackPanel Orientation="Vertical">
@@ -51,7 +51,7 @@
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
-                    <GroupBox Name="GroupOSInfo" Header="Подробнее" Height="0">
+                    <GroupBox Name="GroupOSInfo" Header="Подробнее" Height="0" >
                         <StackPanel  Orientation="Horizontal" HorizontalAlignment="Center">
                             <StackPanel Orientation="Vertical">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
@@ -64,10 +64,13 @@
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal">
                                     <GroupBox Header="Локальный ip">
-                                        <TextBox IsReadOnly="True" Text="{Binding IpLocal}" Width="200"/>
+                                        <TextBox IsReadOnly="True" Text="{Binding IpLocal}" Width="123" HorizontalContentAlignment="Center"/>
                                     </GroupBox>
                                     <GroupBox Header="Мак адрес">
-                                        <TextBox IsReadOnly="True" Text="{Binding MacAdress}" Width="200"/>
+                                        <TextBox IsReadOnly="True" Text="{Binding MacAdress}" Width="123" HorizontalContentAlignment="Center"/>
+                                    </GroupBox>
+                                    <GroupBox Header="Ip">
+                                        <TextBox IsReadOnly="True" Text="{Binding IpInternet}" Width="122" HorizontalContentAlignment="Center"/>
                                     </GroupBox>
                                 </StackPanel>
                                 
@@ -294,11 +297,11 @@
             </StackPanel>
         </ScrollViewer>
 
-        <Button Click="Save_Click" Grid.Row="1">
-            <TextBlock FontSize="20">Сохранить</TextBlock>
+        <Button Style="{StaticResource StandartButton}" Margin="5,0,0,0" Click="Save_Click" Grid.Row="1">
+            <TextBlock FontSize="20" Margin="0">Сохранить</TextBlock>
         </Button>
-        <Button Click="ReloadInfo_Click" Grid.Row="1" Grid.Column="1" Margin="5,0,0,0" >
-            <TextBlock FontSize="40" Margin="0,-10">↻</TextBlock>
+        <Button Style="{StaticResource StandartButton}" Click="ReloadInfo_Click" Grid.Row="1" Grid.Column="1" Margin="5,0" >
+            <TextBlock FontSize="40" Margin="0,-13">↻</TextBlock>
         </Button>
 
 

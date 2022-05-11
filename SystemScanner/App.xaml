@@ -23,5 +23,55 @@
         <Style TargetType="GroupBox">
             <Setter Property="Margin" Value="5"/>
         </Style>
+        <Style TargetType="Button" x:Key="StandartButton">
+            <Setter Property="Background" Value="#99FF4D00"/>
+            <Setter Property="UseLayoutRounding" Value="True"/>
+            <Setter Property="IsManipulationEnabled" Value="True"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Padding="0"
+                            BorderBrush="Gray"
+                            BorderThickness="1" 
+                                CornerRadius="5" 
+                                Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                    <Setter Property="RenderTransform">
+                        <Setter.Value>
+                            <ScaleTransform ScaleX="1.005" ScaleY="1.05"/>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect Color="Gray" BlurRadius="3" RenderingBias="Quality"/>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Background" Value="#FF4D00"/>
+                </Trigger>
+                <Trigger Property="IsMouseCaptured" Value="True">
+                    <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                    <Setter Property="RenderTransform">
+                        <Setter.Value>
+                            <ScaleTransform ScaleX="1.001" ScaleY="1.01"/>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect Color="Gray" BlurRadius="3" RenderingBias="Quality"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Application.Resources>
 </Application>

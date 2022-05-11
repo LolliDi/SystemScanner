@@ -30,6 +30,7 @@
           <Property Name="MotherBoardId" Type="int" />
           <Property Name="ProcessorId" Type="int" />
           <Property Name="DateCheck" Type="datetime" />
+          <Property Name="InventoryNumber" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="ComputersVideo">
           <Key>
@@ -368,6 +369,7 @@
           <Property Name="MotherBoardId" Type="Int32" />
           <Property Name="ProcessorId" Type="Int32" />
           <Property Name="DateCheck" Type="DateTime" Precision="3" />
+          <Property Name="InventoryNumber" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="ComputerHard" Relationship="Model.FK_ComputerHard_Computers" FromRole="Computers" ToRole="ComputerHard" />
           <NavigationProperty Name="MotherBoards" Relationship="Model.FK_Computers_MotherBoards" FromRole="Computers" ToRole="MotherBoards" />
           <NavigationProperty Name="Processors" Relationship="Model.FK_Computers_Processors" FromRole="Computers" ToRole="Processors" />
@@ -619,6 +621,7 @@
           <EntitySetMapping Name="Computers">
             <EntityTypeMapping TypeName="Model.Computers">
               <MappingFragment StoreEntitySet="Computers">
+                <ScalarProperty Name="InventoryNumber" ColumnName="InventoryNumber" />
                 <ScalarProperty Name="DateCheck" ColumnName="DateCheck" />
                 <ScalarProperty Name="ProcessorId" ColumnName="ProcessorId" />
                 <ScalarProperty Name="MotherBoardId" ColumnName="MotherBoardId" />
