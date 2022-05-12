@@ -15,8 +15,8 @@ namespace SystemScanner
     public partial class ComputerHard
     {
         public int Id { get; set; }
-        public int IdPC { get; set; }
-        public int IdHard { get; set; }
+        public Nullable<int> IdPC { get; set; }
+        public Nullable<int> IdHard { get; set; }
     
         public virtual Computers Computers { get; set; }
         public virtual HardDrives HardDrives { get; set; }

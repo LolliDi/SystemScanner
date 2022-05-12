@@ -4,25 +4,24 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="b8d2a9bc680740179210da5301581742" Name="Diagram1">
-        <EntityTypeShape EntityType="Model.ComputerHard" Width="1.5" PointX="5.25" PointY="6.375" />
-        <EntityTypeShape EntityType="Model.Computers" Width="1.5" PointX="3" PointY="4.875" />
-        <EntityTypeShape EntityType="Model.ComputersVideo" Width="1.5" PointX="5.25" PointY="3.375" />
-        <EntityTypeShape EntityType="Model.HardDrives" Width="1.5" PointX="3" PointY="10.875" />
-        <EntityTypeShape EntityType="Model.MotherBoards" Width="1.5" PointX="0.75" PointY="4.75" />
-        <EntityTypeShape EntityType="Model.OS" Width="1.5" PointX="5.25" PointY="13.25" />
-        <EntityTypeShape EntityType="Model.PhysicalMemory" Width="1.5" PointX="5.25" PointY="10" />
-        <EntityTypeShape EntityType="Model.Processors" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="Model.sysdiagrams" Width="1.5" PointX="7.75" PointY="1.125" />
-        <EntityTypeShape EntityType="Model.VideoControllers" Width="1.5" PointX="3" PointY="0.875" />
-        <AssociationConnector Association="Model.FK_ComputerHard_Computers" />
-        <AssociationConnector Association="Model.FK_ComputerHard_HardDrives" />
-        <AssociationConnector Association="Model.FK_Computers_MotherBoards" />
-        <AssociationConnector Association="Model.FK_Computers_Processors" />
-        <AssociationConnector Association="Model.FK_ComputersVideo_Computers" />
-        <AssociationConnector Association="Model.FK_OS_Computers" />
-        <AssociationConnector Association="Model.FK_PhysicalMemory_Computers" />
-        <AssociationConnector Association="Model.FK_ComputersVideo_VideoControllers" />
+      <Diagram DiagramId="a582c3e6b26e4c16bfd1ec26a667b312" Name="Diagram1">
+        <EntityTypeShape EntityType="ComputersInfoModel.ComputerHard" Width="1.5" PointX="5.25" PointY="8" />
+        <EntityTypeShape EntityType="ComputersInfoModel.Computers" Width="1.5" PointX="3" PointY="4.5" />
+        <EntityTypeShape EntityType="ComputersInfoModel.ComputersVideo" Width="1.5" PointX="8.25" PointY="6" />
+        <EntityTypeShape EntityType="ComputersInfoModel.HardDrives" Width="1.5" PointX="3" PointY="10.875" />
+        <EntityTypeShape EntityType="ComputersInfoModel.MotherBoards" Width="1.5" PointX="0.75" PointY="1.625" />
+        <EntityTypeShape EntityType="ComputersInfoModel.OS" Width="1.5" PointX="5.25" PointY="12.875" />
+        <EntityTypeShape EntityType="ComputersInfoModel.PhysicalMemory" Width="1.5" PointX="5.25" PointY="4.125" />
+        <EntityTypeShape EntityType="ComputersInfoModel.Processors" Width="1.5" PointX="0.75" PointY="5.375" />
+        <EntityTypeShape EntityType="ComputersInfoModel.VideoControllers" Width="1.5" PointX="6" PointY="0.875" />
+        <AssociationConnector Association="ComputersInfoModel.FK_ComputerHard_Computers" />
+        <AssociationConnector Association="ComputersInfoModel.FK_ComputerHard_HardDrives" />
+        <AssociationConnector Association="ComputersInfoModel.FK_Computers_MotherBoards" />
+        <AssociationConnector Association="ComputersInfoModel.FK_Computers_Processors" />
+        <AssociationConnector Association="ComputersInfoModel.FK_ComputersVideo_Computers" />
+        <AssociationConnector Association="ComputersInfoModel.FK_OS_Computers" />
+        <AssociationConnector Association="ComputersInfoModel.FK_PhysicalMemory_Computers" />
+        <AssociationConnector Association="ComputersInfoModel.FK_ComputersVideo_VideoControllers" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

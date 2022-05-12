@@ -23,8 +23,8 @@ namespace SystemScanner
         public int Id { get; set; }
         public string Manufacturer { get; set; }
         public string Model { get; set; }
-        public Nullable<int> NumberOfCores { get; set; }
-        public Nullable<int> ThreadCount { get; set; }
+        public Nullable<double> NumberOfCores { get; set; }
+        public Nullable<double> ThreadCount { get; set; }
         public Nullable<double> StartClockSpeed { get; set; }
         public Nullable<double> L1CacheMB { get; set; }
         public Nullable<double> L2CacheMB { get; set; }

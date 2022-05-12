@@ -25,10 +25,6 @@ namespace SystemScanner
         public string Model { get; set; }
         public string VideoProcessor { get; set; }
         public Nullable<double> AdapterRAMMB { get; set; }
-        public Nullable<double> MaxRefreshRate { get; set; }
-        public Nullable<int> CurrentVerticalResolution { get; set; }
-        public Nullable<int> CurrentVHorizontalResolution { get; set; }
-        public string MemoryType { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ComputersVideo> ComputersVideo { get; set; }

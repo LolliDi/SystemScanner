@@ -23,24 +23,11 @@ namespace SystemScanner
         public int Id { get; set; }
         public string Manufacturer { get; set; }
         public string Model { get; set; }
-        public Nullable<int> SlotsMemory { get; set; }
+        public Nullable<double> SlotsMemory { get; set; }
         public string MemoryType { get; set; }
         public Nullable<double> MaxPhysicalMemoryMB { get; set; }
-        public Nullable<int> CanalsMemoryCount { get; set; }
+        public Nullable<double> CanalsMemoryCount { get; set; }
         public string ChipSet { get; set; }
-        public Nullable<int> SlotsPCI { get; set; }
-        public Nullable<int> SlotsPCIEx1 { get; set; }
-        public Nullable<int> SlotsPCIE30x16 { get; set; }
-        public Nullable<int> SlotsSata2 { get; set; }
-        public Nullable<int> SlotsSata3 { get; set; }
-        public Nullable<int> SlotsPS2 { get; set; }
-        public Nullable<int> USB20 { get; set; }
-        public Nullable<int> USB30 { get; set; }
-        public Nullable<bool> VGA { get; set; }
-        public Nullable<bool> DVI { get; set; }
-        public Nullable<bool> HDMI { get; set; }
-        public string EthernetController { get; set; }
-        public string AudioController { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Computers> Computers { get; set; }

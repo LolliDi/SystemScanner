@@ -13,10 +13,10 @@ namespace SystemScanner
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class Entities1 : DbContext
+    public partial class ComputersInfoEntities : DbContext
     {
-        public Entities1()
-            : base("name=Entities1")
+        public ComputersInfoEntities()
+            : base("name=ComputersInfoEntities")
         {
         }
     
@@ -33,7 +33,6 @@ namespace SystemScanner
         public virtual DbSet<OS> OS { get; set; }
         public virtual DbSet<PhysicalMemory> PhysicalMemory { get; set; }
         public virtual DbSet<Processors> Processors { get; set; }
-        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<VideoControllers> VideoControllers { get; set; }
     }
 }
