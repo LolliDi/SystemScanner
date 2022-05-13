@@ -13,10 +13,10 @@ namespace SystemScanner
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class ComputersInfoEntities : DbContext
+    public partial class ComputersInfoEntities1 : DbContext
     {
-        public ComputersInfoEntities()
-            : base("name=ComputersInfoEntities")
+        public ComputersInfoEntities1()
+            : base("name=ComputersInfoEntities1")
         {
         }
     

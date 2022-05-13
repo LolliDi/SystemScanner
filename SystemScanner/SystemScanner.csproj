@@ -30,7 +30,7 @@
     <ProductName>ПК сканер</ProductName>
     <PublisherName>LolliDi</PublisherName>
     <SuiteName>SystemScanner</SuiteName>
-    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationRevision>6</ApplicationRevision>
     <ApplicationVersion>1.6.1.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>

@@ -8,6 +8,6 @@ namespace SystemScanner
 {
     public static class DBCl
     {
-        public static ComputersInfoEntities db = new ComputersInfoEntities();
+        public static ComputersInfoEntities1 db = new ComputersInfoEntities1();
     }
 }

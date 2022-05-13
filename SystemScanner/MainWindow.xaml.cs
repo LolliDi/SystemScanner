@@ -640,7 +640,7 @@ namespace SystemScanner
         {
             try
             {
-                DBCl.db = new ComputersInfoEntities();
+                DBCl.db = new ComputersInfoEntities1();
                 computer = DBCl.db.Computers.FirstOrDefault(x => x.id == idPC);
                 motherBoard = DBCl.db.MotherBoards.FirstOrDefault(x => x.Id == computer.MotherBoardId);
                 processor = DBCl.db.Processors.FirstOrDefault(x => x.Id == computer.ProcessorId);
